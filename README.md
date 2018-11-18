@@ -1,6 +1,14 @@
-# FBX MENAGER WRAPPER
+# FBX MENAGER WRAPPER (WIP)
 
 ## Visual Studio 2017
-work in progress...
-require the presence of "libfbxsdk.dll" in the same folder of program, add it manualy please.
+
+- Requires installation of FBX SDK 2019.2, then copy manually all the different versions of "libfbxsdk.lib" in the folder "FbxWrapper\FBXSDK.2019.2\lib"
+The visual studio pre-compile macro automatically copy to output the correct "libfbxsdk.dll" versions. Remember that all your C# executable require the
+presence of "libfbxsdk.dll" in the same folder.
+
+- FbxWrapperTest.csproj is used to test the wrapper for managed code
+
+- I will not convert all fbx sdk class, only those that serve to my purpose.
+
+- I'm not a programmer but for some reason the code work, if you found compiling issue, ask me to johnwhilemail@gmail.com
 

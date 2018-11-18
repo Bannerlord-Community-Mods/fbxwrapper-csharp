@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="Manager.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Stdafx.cpp">
+      <Filter>Helper</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Manager.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="Properties.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Exception.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="StringHelper.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Stdafx.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="app.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="app.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Helper">
+      <UniqueIdentifier>{83a7d2a3-490d-4e48-ba87-9bb7f72e70a4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

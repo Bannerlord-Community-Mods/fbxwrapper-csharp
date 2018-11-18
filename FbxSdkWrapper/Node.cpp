@@ -1,0 +1,40 @@
+#include "stdafx.h"
+#include "Node.h"
+
+using namespace FbxWrapper;
+
+Node::Node(FbxNode *pnode)
+{
+	m_node = pnode;
+
+	/*m_children = gcnew List<SceneNode^>();
+	m_attributes = gcnew List<NodeAttribute^>();
+
+	for (int i = 0; i < m_nativeNode->GetChildCount(); i++)
+	{
+		auto sub = m_nativeNode->GetChild(i);
+		m_children->Add(gcnew SceneNode(sub));
+	}
+
+	for (int i = 0; i < m_nativeNode->GetNodeAttributeCount(); i++)
+	{
+		auto attr = m_nativeNode->GetNodeAttributeByIndex(i);
+		m_attributes->Add(gcnew NodeAttribute(attr));
+	}
+	*/
+}
+
+string ^Node::Name::get()
+{
+	return gcnew string(m_node->GetName());
+}
+
+int Node::GetChildCount()
+{
+	return m_node->GetChildCount(false);
+}
+
+Node ^Node::GetChild(int index)
+{
+	return gcnew Node(m_node->GetChild(index));
+}

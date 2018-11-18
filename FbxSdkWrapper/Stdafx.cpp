@@ -2,5 +2,5 @@
 // Wrapper.pch sarà l'intestazione precompilata
 // stdafx.obj conterrà le informazioni sui tipi precompilati
 
-#include "stdafx.h"
+#include "Stdafx.h"
 

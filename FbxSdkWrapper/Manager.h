@@ -11,8 +11,8 @@ namespace FbxWrapper
 		static FbxExporter *GetExporter();
 
 	private:
-		static FbxManager * m_nativeManager;
-		static FbxImporter *m_nativeImporter;
-		static FbxExporter *m_nativeExporter;
+		static FbxManager * m_manager;
+		static FbxImporter *m_importer;
+		static FbxExporter *m_exporter;
 	};
 }

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Scene.h"
-#include "Manager.h"
 
 using namespace System;
 using namespace System::Runtime::InteropServices;
@@ -10,11 +9,36 @@ using namespace FbxWrapper;
 
 Scene::Scene(string ^name)
 {
-	const char* pname = StringHelper::ToNative(name);
-
-	//IntPtr pname = Marshal::StringToHGlobalAnsi(name);
-	//Marshal::FreeHGlobal(pname);
-	//m_nativeScene = FbxScene::Create(Manager::GetInstance(), pname.ToPointer());
-	//m_rootNode = gcnew SceneNode(m_nativeScene->GetRootNode());
+	m_scene = FbxScene::Create(Manager::GetInstance(), StringHelper::ToNative(name));
+	m_rootNode = gcnew Node(m_scene->GetRootNode());
 }
 
+Scene ^Scene::Import(string ^filename)
+{
+	FbxManager *manager = Manager::GetInstance();
+	FbxImporter* importer = Manager::GetImporter();
+
+	if (!importer->Initialize(StringHelper::ToNative(filename), -1, manager->GetIOSettings()))
+		throw gcnew FbxException("Failed to initialise the FBX importer: {0}", gcnew string(importer->GetStatus().GetErrorString()));
+
+	auto scene = gcnew Scene("");
+
+	// File format version numbers to be populated.
+	int lFileMajor, lFileMinor, lFileRevision;
+
+	// Populate the FBX file format version numbers with the import file.
+	importer->GetFileVersion(lFileMajor, lFileMinor, lFileRevision);
+
+	if (!importer->Import(scene->m_scene))
+		throw gcnew FbxException("Failed to import the scene: {0}", gcnew string(importer->GetStatus().GetErrorString()));
+
+	// Needs refreshing
+	scene->m_rootNode = gcnew Node(scene->m_scene->GetRootNode());
+
+	return scene;
+}
+
+Node ^Scene::RootNode::get()
+{
+	return m_rootNode;
+}

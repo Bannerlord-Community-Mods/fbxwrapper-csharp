@@ -1,0 +1,2 @@
+This folder must contain the "include" and "lib" folder from fbx sdk for visual studio 2007 (it's in beta version).
+I add the installer only for backup and also because the two folder's size are 800MB

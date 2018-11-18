@@ -80,10 +80,12 @@
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
     <SourcePath>$(VC_SourcePath)</SourcePath>
     <OutDir>$(SolutionDir)\$(ProjectName)\Output\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <OutDir>$(SolutionDir)\$(ProjectName)\Output\$(PlatformTarget)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -103,6 +105,12 @@
       <AdditionalDependencies>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)\libfbxsdk.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /d $(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)\libfbxsdk.dll $(OutDir)</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Require the libfbxsdk.dll file in the same folder, not necessary overwrite, just copy if not exist</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -116,6 +124,10 @@
       <AdditionalDependencies>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)\libfbxsdk.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /d $(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)\libfbxsdk.dll $(OutDir)</Command>
+      <Message>Require the libfbxsdk.dll file in the same folder, not necessary overwrite, just copy if not exist</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

@@ -23,18 +23,3 @@ static Manager::Manager()
 	//m_nativeManager->SetIOSettings(ios);
 
 }
-
-FbxManager *Manager::GetInstance()
-{
-	return m_manager;
-}
-
-FbxImporter *Manager::GetImporter()
-{
-	return m_importer;
-}
-
-FbxExporter *Manager::GetExporter()
-{
-	return m_exporter;
-}

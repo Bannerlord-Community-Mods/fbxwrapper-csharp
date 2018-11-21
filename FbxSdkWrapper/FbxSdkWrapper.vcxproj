@@ -100,6 +100,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;FBXSDK_SHARED</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(SolutionDir)\FBXSDK.2019.2\include</AdditionalIncludeDirectories>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)\libfbxsdk.lib</AdditionalDependencies>
@@ -151,16 +152,19 @@
   <ItemGroup>
     <ClInclude Include="Exception.h" />
     <ClInclude Include="Manager.h" />
+    <ClInclude Include="NodeAttribute.h" />
     <ClInclude Include="Properties.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Stdafx.h" />
     <ClInclude Include="StringHelper.h" />
+    <ClInclude Include="Types.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="Manager.cpp" />
+    <ClCompile Include="NodeAttribute.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Stdafx.cpp">

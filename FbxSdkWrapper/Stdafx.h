@@ -9,6 +9,7 @@
 #include "Exception.h"
 #include "StringHelper.h"
 #include "Properties.h"
+#include "Types.h"
 
 typedef System::String string;
 

@@ -9,16 +9,15 @@ using namespace FbxWrapper;
 
 Scene::Scene(string ^name)
 {
-	m_scene = FbxScene::Create(Manager::GetInstance(), StringHelper::ToNative(name));
+	m_scene = FbxScene::Create(Manager::m_manager, StringHelper::ToNative(name));
 	m_rootNode = gcnew Node(m_scene->GetRootNode());
 }
 
 Scene ^Scene::Import(string ^filename)
 {
-	FbxManager *manager = Manager::GetInstance();
-	FbxImporter* importer = Manager::GetImporter();
+	FbxImporter* importer = Manager::m_importer;
 
-	if (!importer->Initialize(StringHelper::ToNative(filename), -1, manager->GetIOSettings()))
+	if (!importer->Initialize(StringHelper::ToNative(filename), -1, importer->GetIOSettings()))
 		throw gcnew FbxException("Failed to initialise the FBX importer: {0}", gcnew string(importer->GetStatus().GetErrorString()));
 
 	auto scene = gcnew Scene("");

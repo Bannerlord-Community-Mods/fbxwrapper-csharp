@@ -39,7 +39,12 @@ namespace FbxWrapperTest
         public TreeNode GetTreeNodeRecursive(Node node)
         {
             if (node == null) return null;
-            TreeNode viewNode = new TreeNode(node.Name);
+
+            NodeAttribute attribute = node.Attribute;
+
+            string name = attribute != null ? attribute.Type.ToString() : "null";
+
+            TreeNode viewNode = new TreeNode(string.Format("{0} {1}", node.Name, name));
 
             for (int i=0;i<node.GetChildCount();i++)
             {

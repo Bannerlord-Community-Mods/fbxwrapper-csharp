@@ -6,11 +6,8 @@ namespace FbxWrapper
 	{
 	public:
 		static Manager();
-		static FbxManager *GetInstance();
-		static FbxImporter *GetImporter();
-		static FbxExporter *GetExporter();
 
-	private:
+	internal:
 		static FbxManager * m_manager;
 		static FbxImporter *m_importer;
 		static FbxExporter *m_exporter;

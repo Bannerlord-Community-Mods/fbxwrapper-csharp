@@ -29,6 +29,18 @@ string ^Node::Name::get()
 	return gcnew string(m_node->GetName());
 }
 
+NodeAttribute ^Node::Attribute::get()
+{
+	FbxNodeAttribute *a = m_node->GetNodeAttribute();
+
+	if (a == nullptr)
+	{
+		//throw gcnew FbxException("Native node attribute is null");
+		return nullptr;
+	}
+	return gcnew NodeAttribute(m_node->GetNodeAttribute());
+}
+
 int Node::GetChildCount()
 {
 	return m_node->GetChildCount(false);

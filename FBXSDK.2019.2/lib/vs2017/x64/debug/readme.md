@@ -1,0 +1,1 @@
+Place here the files from "C:\Program Files\Autodesk\FBX\FBX SDK\2019.2\lib\vs2017\x64\debug\"

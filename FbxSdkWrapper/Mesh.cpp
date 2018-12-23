@@ -77,6 +77,17 @@ array<Vector2> ^Mesh::TextureCoords::get()
 	return list;
 }
 
+array<Vector3> ^Mesh::Tangents::get()
+{
+	auto tangents = m_mesh->GetLayer(0)->GetTangents();
+	int count = tangents->GetDirectArray().GetCount();
+	auto list = gcnew array<Vector3>(count);
+
+	for (int i = 0; i < count; i++)
+		list[i] = Vector3(tangents->GetDirectArray().GetAt(i));
+	return list;
+}
+
 array<Colour> ^Mesh::VertexColours::get()
 {
 	auto colours = m_mesh->GetLayer(0)->GetVertexColors();

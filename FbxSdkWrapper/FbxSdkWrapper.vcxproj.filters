@@ -9,6 +9,8 @@
       <Filter>Helper</Filter>
     </ClCompile>
     <ClCompile Include="NodeAttribute.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Polygon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Properties.h">
@@ -40,6 +42,15 @@
     </ClInclude>
     <ClInclude Include="Types.h">
       <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Vectors.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygon.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

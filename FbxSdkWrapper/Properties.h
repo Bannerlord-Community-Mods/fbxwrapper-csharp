@@ -1,14 +1,13 @@
 #pragma once
 
-
-	// Defines a read-only property.
+// Defines a read-only property.
 #define property_r(type, name)\
 	property type name\
 	{\
 	type get();\
 	}
 
-// Defines a property that is only writable internally.
+// Defines a property that is readable and writable internally.
 #define property_ri(type, name)\
 	property type name\
 	{\

@@ -6,22 +6,6 @@ using namespace FbxWrapper;
 Node::Node(FbxNode *pnode)
 {
 	m_node = pnode;
-
-	/*m_children = gcnew List<SceneNode^>();
-	m_attributes = gcnew List<NodeAttribute^>();
-
-	for (int i = 0; i < m_nativeNode->GetChildCount(); i++)
-	{
-		auto sub = m_nativeNode->GetChild(i);
-		m_children->Add(gcnew SceneNode(sub));
-	}
-
-	for (int i = 0; i < m_nativeNode->GetNodeAttributeCount(); i++)
-	{
-		auto attr = m_nativeNode->GetNodeAttributeByIndex(i);
-		m_attributes->Add(gcnew NodeAttribute(attr));
-	}
-	*/
 }
 
 string ^Node::Name::get()
@@ -49,4 +33,37 @@ int Node::GetChildCount()
 Node ^Node::GetChild(int index)
 {
 	return gcnew Node(m_node->GetChild(index));
+}
+
+
+Vector3 Node::Position::get()
+{
+	return Vector3(m_node->LclTranslation.Get());
+}
+void Node::Position::set(Vector3 value)
+{
+	m_node->LclTranslation.Set(value);
+}
+
+Vector3 Node::Rotation::get()
+{
+	return Vector3(m_node->LclRotation.Get());
+}
+void Node::Rotation::set(Vector3 value)
+{
+	m_node->LclRotation.Set(value);
+}
+
+Vector3 Node::Scale::get()
+{
+	return Vector3(m_node->LclScaling.Get());
+}
+void Node::Scale::set(Vector3 value)
+{
+	m_node->LclScaling.Set(value);
+}
+
+Mesh ^Node::Mesh::get()
+{
+	return gcnew FbxWrapper::Mesh(m_node->GetMesh());
 }

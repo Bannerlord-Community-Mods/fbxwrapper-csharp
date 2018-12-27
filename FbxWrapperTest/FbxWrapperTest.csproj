@@ -94,6 +94,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\SharpDxEngine\CommonLib\CommonLib.csproj">
+      <Project>{7e655b04-5914-4f26-9947-81c20b41f049}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FbxSdkWrapper\FbxSdkWrapper.vcxproj">
       <Project>{46228303-44c3-47ad-830d-9702b09f97b1}</Project>
       <Name>FbxSdkWrapper</Name>
@@ -109,9 +113,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
-
-
-</PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>xcopy /d /f "$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformName)\$(ConfigurationName)\libfbxsdk.dll" ""</PostBuildEvent>

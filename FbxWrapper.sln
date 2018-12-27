@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FbxSdkWrapper", "FbxSdkWrap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FbxWrapperTest", "FbxWrapperTest\FbxWrapperTest.csproj", "{1A044749-7DCA-4B8B-BE76-DF79024E83B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLib", "..\..\SharpDxEngine\CommonLib\CommonLib.csproj", "{7E655B04-5914-4F26-9947-81C20B41F049}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -30,6 +32,13 @@ Global
 		{1A044749-7DCA-4B8B-BE76-DF79024E83B6}.Release|x64.ActiveCfg = Release|x64
 		{1A044749-7DCA-4B8B-BE76-DF79024E83B6}.Release|x64.Build.0 = Release|x64
 		{1A044749-7DCA-4B8B-BE76-DF79024E83B6}.Release|x86.ActiveCfg = Release|x86
+		{7E655B04-5914-4F26-9947-81C20B41F049}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7E655B04-5914-4F26-9947-81C20B41F049}.Debug|x64.Build.0 = Debug|Any CPU
+		{7E655B04-5914-4F26-9947-81C20B41F049}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7E655B04-5914-4F26-9947-81C20B41F049}.Release|x64.ActiveCfg = Release|Any CPU
+		{7E655B04-5914-4F26-9947-81C20B41F049}.Release|x64.Build.0 = Release|Any CPU
+		{7E655B04-5914-4F26-9947-81C20B41F049}.Release|x86.ActiveCfg = Release|Any CPU
+		{7E655B04-5914-4F26-9947-81C20B41F049}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

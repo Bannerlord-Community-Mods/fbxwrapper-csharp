@@ -28,4 +28,18 @@ namespace FbxWrapper
 		eCachedEffect,
 		eLine
 	};
+	public enum class FileFormat : int
+	{
+		Null = -1,
+
+		FbxBinary = 0,
+		FbxAscii = 1,
+		FbxEncrypted = 2,
+		Fbx5Binary = 3,
+		Fbx5Ascii = 4,
+		AutocadDXF = 5,
+		StudioMax3DS = 6,
+		AliasOBJ = 7,
+		ColladaDAE = 8
+	};
 }

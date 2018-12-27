@@ -8,30 +8,75 @@ namespace FbxWrapperTest
 {
     public partial class Form1 : Form
     {
+        Scene scene;
+
         public Form1()
         {
             InitializeComponent();
+            savefbxToolStripMenuItem.Enabled = false;
+            scene = null;
+        }
+
+        private void savefbxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (scene == null) return;
+
+            using (SaveFileDialog savedialog = new SaveFileDialog())
+            {
+                savedialog.DefaultExt = "fbx";
+                savedialog.Filter = "Autodesk Fbx (*.fbx)|*.fbx| ASCII Fbx (*.fbx)|*.fbx";
+                savedialog.RestoreDirectory = true;
+                savedialog.Title = "Save fbx file";
+
+                if (savedialog.ShowDialog()== DialogResult.OK)
+                {
+                    Debug.WriteLine("Save file : " + savedialog.FileName);
+
+                    try
+                    {
+                        //FileFormat.Null = -1 for autodetect by exporter
+                        FileFormat format = savedialog.FilterIndex == 1 ? FileFormat.Null : FileFormat.FbxAscii;
+                        Scene.Export(scene, savedialog.FileName, format);
+                    }
+                    catch(Exception exc)
+                    {
+                        Debug.WriteLine(exc.ToString());
+                    }
+                }
+            }
         }
 
         private void openfbxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            using (OpenFileDialog opendialog = new OpenFileDialog())
             {
-                Debug.WriteLine("Open file : " + openFileDialog.FileName);
+                opendialog.DefaultExt = "fbx";
+                opendialog.Filter = "Autodesk Fbx (*.fbx)|*.fbx";
+                opendialog.RestoreDirectory = true;
+                opendialog.Title = "Open fbx file";
 
-                try
+                if (opendialog.ShowDialog() == DialogResult.OK)
                 {
-                    Scene scene = Scene.Import(openFileDialog.FileName);
-                    Node root = scene.RootNode;
+                    Debug.WriteLine("Open file : " + opendialog.FileName);
 
-                    treeView1.Nodes.Clear();
-                    treeView1.Nodes.Add(GetTreeNodeRecursive(root));
-                    treeView1.ExpandAll();
-                }
-                catch (Exception exc)
-                {
-                    Debug.WriteLine(exc.ToString());
+                    try
+                    {
+                        scene = Scene.Import(opendialog.FileName);
+
+                        Version version = scene.FileVersion;
+
+                        Debug.WriteLine(scene.FileVersion);
+
+                        Node root = scene.RootNode;
+                        treeView1.Nodes.Clear();
+                        treeView1.Nodes.Add(GetTreeNodeRecursive(root));
+                        treeView1.ExpandAll();
+                        savefbxToolStripMenuItem.Enabled = true;
+                    }
+                    catch (Exception exc)
+                    {
+                        Debug.WriteLine(exc.ToString());
+                    }
                 }
             }
         }
@@ -50,7 +95,7 @@ namespace FbxWrapperTest
 
                 if (attribute.Type == AttributeType.eMesh)
                 {
-                    UnpackMesh(viewNode, node.Mesh);
+                    UnpackMesh(viewNode, node);
                 }
             }
             else
@@ -68,16 +113,30 @@ namespace FbxWrapperTest
             return viewNode;
         }
 
-        public void UnpackMesh(TreeNode header, Mesh staticmesh)
+        public void UnpackMesh(TreeNode header, Node node)
         {
+            Mesh staticmesh = node.Mesh;
+
+            Debug.WriteLine("triangulated : " + staticmesh.Triangulated);
+
+            header.Nodes.Add(string.Format("Pos : {0}", node.Position.ToString()));
+            header.Nodes.Add(string.Format("Scale : {0}", node.Scale.ToString()));
+            header.Nodes.Add(string.Format("Rot : {0}", node.Rotation.ToString()));
+
+
             TreeNode vertexnode = new TreeNode("vertices");
             TreeNode normalnode = new TreeNode("normals");
             TreeNode polygonode = new TreeNode("indices");
             TreeNode textcoordnode = new TreeNode("textcoord");
 
-
             Vector3[] vertices = staticmesh.Vertices;
             foreach (Vector3 v in vertices) vertexnode.Nodes.Add(v.ToString());
+
+            Vector2[] textcoord = staticmesh.TextureCoords;
+            foreach (Vector2 v in textcoord) textcoordnode.Nodes.Add(v.ToString());
+
+            Vector3[] normals = staticmesh.Normals;
+            foreach (Vector3 v in normals) normalnode.Nodes.Add(v.ToString());
 
             Polygon[] indices = staticmesh.Polygons;
             foreach (Polygon t in indices) polygonode.Nodes.Add(PolygonToString(t));
@@ -94,5 +153,7 @@ namespace FbxWrapperTest
             string str = string.Join(",", index);
             return str;
         }
+
+
     }
 }

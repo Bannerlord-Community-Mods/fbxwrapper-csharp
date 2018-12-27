@@ -31,7 +31,7 @@
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.openfbxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.savefbxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,7 +46,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openfbxToolStripMenuItem});
+            this.openfbxToolStripMenuItem,
+            this.savefbxToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(706, 24);
@@ -60,12 +61,12 @@
             this.openfbxToolStripMenuItem.Text = "Open *.fbx";
             this.openfbxToolStripMenuItem.Click += new System.EventHandler(this.openfbxToolStripMenuItem_Click);
             // 
-            // openFileDialog
+            // savefbxToolStripMenuItem
             // 
-            this.openFileDialog.DefaultExt = "fbx";
-            this.openFileDialog.Filter = "Autodesk Fbx (*.fbx)|*.fbx";
-            this.openFileDialog.RestoreDirectory = true;
-            this.openFileDialog.Title = "Open fbx file";
+            this.savefbxToolStripMenuItem.Name = "savefbxToolStripMenuItem";
+            this.savefbxToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
+            this.savefbxToolStripMenuItem.Text = "Save *.fbx";
+            this.savefbxToolStripMenuItem.Click += new System.EventHandler(this.savefbxToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -89,7 +90,7 @@
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem openfbxToolStripMenuItem;
-        private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.ToolStripMenuItem savefbxToolStripMenuItem;
     }
 }
 

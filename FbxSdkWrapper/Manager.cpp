@@ -23,3 +23,10 @@ static Manager::Manager()
 	//m_nativeManager->SetIOSettings(ios);
 
 }
+
+Manager::~Manager()
+{
+	m_importer->Destroy();
+	m_exporter->Destroy();
+	m_manager->Destroy();
+}

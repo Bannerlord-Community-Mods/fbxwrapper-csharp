@@ -6,6 +6,7 @@ namespace FbxWrapper
 	{
 	public:
 		static Manager();
+		~Manager();
 
 	internal:
 		static FbxManager * m_manager;

@@ -14,9 +14,12 @@ namespace FbxWrapper
 	public:
 		Scene(string ^name);
 		static Scene ^Import(string ^filepath);
-		
-		property Node^ RootNode {Node^ get(); }
-		//property_r(Node^, RootNode);
+		static void Export(Scene ^scene, string ^filepath, FileFormat format);
+		property_r(Node^, RootNode);
+		// file version from importer, will be stored to remember when exporting
+		//property_rw(Version^, FileVersion);
+
+		Version^ FileVersion;
 
 	private:
 		FbxScene *m_scene;

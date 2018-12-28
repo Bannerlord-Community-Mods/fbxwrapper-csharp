@@ -12,14 +12,17 @@ namespace FbxWrapper
 	public ref class Scene
 	{
 	public:
+		/// <summary>
+		/// Initialize a new scene with its name, root node are created automatically
+		/// </summary> 
+		Scene();
 		Scene(string ^name);
 		static Scene ^Import(string ^filepath);
 		static void Export(Scene ^scene, string ^filepath, FileFormat format);
+		
 		property_r(Node^, RootNode);
 		// file version from importer, will be stored to remember when exporting
-		//property_rw(Version^, FileVersion);
-
-		Version^ FileVersion;
+		property Version^ FileVersion;
 
 	private:
 		FbxScene *m_scene;

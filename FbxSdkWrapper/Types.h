@@ -3,7 +3,7 @@
 namespace FbxWrapper
 {
 	// The types that are to be used for the attributes
-	public enum class AttributeType
+	public enum class AttributeType : int
 	{
 		eUnknown,
 		eNull,

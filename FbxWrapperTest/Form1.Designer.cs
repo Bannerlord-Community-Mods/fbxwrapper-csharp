@@ -32,6 +32,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.openfbxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.savefbxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.convertobjTofbxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,6 +48,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openfbxToolStripMenuItem,
+            this.convertobjTofbxToolStripMenuItem,
             this.savefbxToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -67,6 +69,13 @@
             this.savefbxToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
             this.savefbxToolStripMenuItem.Text = "Save *.fbx";
             this.savefbxToolStripMenuItem.Click += new System.EventHandler(this.savefbxToolStripMenuItem_Click);
+            // 
+            // convertobjTofbxToolStripMenuItem
+            // 
+            this.convertobjTofbxToolStripMenuItem.Name = "convertobjTofbxToolStripMenuItem";
+            this.convertobjTofbxToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
+            this.convertobjTofbxToolStripMenuItem.Text = "Open *.obj";
+            this.convertobjTofbxToolStripMenuItem.Click += new System.EventHandler(this.convertobjTofbxToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -91,6 +100,7 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem openfbxToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem savefbxToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem convertobjTofbxToolStripMenuItem;
     }
 }
 

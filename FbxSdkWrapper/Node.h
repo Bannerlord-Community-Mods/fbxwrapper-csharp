@@ -3,17 +3,22 @@
 #include "stdafx.h"
 #include "NodeAttribute.h"
 #include "Mesh.h"
+#include "Manager.h"
 
 //using namespace System::Collections::Generic;
 
 namespace FbxWrapper
 {
 	/// <summary>
-	/// Basic scene's node hierarchy
+	/// Basic scene's node hierarchy.
+	/// Represents an element in the scene graph. A scene graph is a tree of FbxNode objects.
 	/// </summary> 
 	public ref class Node
 	{
 	public:
+		/// <summary>
+		/// </summary> 
+		Node(AttributeType etype, string^ name);
 
 		//property string^ Name {string^ get(); }
 		property_r(string^, Name);
@@ -40,11 +45,14 @@ namespace FbxWrapper
 
 		/// <summary>
 		/// Gets the first mesh attribute of this node if it exists, otherwise null.
+		// (node attribute casted to a FbxMesh pointer)
 		/// </summary>
 		property_r(FbxWrapper::Mesh^, Mesh);
 
 		int GetChildCount();
 		Node ^GetChild(int index);
+
+		void AddChild(Node ^node);
 
 	internal:
 		Node(FbxNode *pnode);

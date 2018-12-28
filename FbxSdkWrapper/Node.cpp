@@ -3,6 +3,27 @@
 
 using namespace FbxWrapper;
 
+
+Node::Node(AttributeType etype, string ^name)
+{
+	m_node = FbxNode::Create(Manager::m_manager, StringHelper::ToNative(name));
+	
+	FbxNodeAttribute *pattribute;
+	switch (etype)
+	{
+	case AttributeType::eMesh:
+		pattribute = FbxMesh::Create(Manager::m_manager, StringHelper::ToNative(name));
+		break;
+
+	default:
+		throw gcnew FbxException("Attribute type {0} not implemented", etype.ToString());
+		break;
+	}
+
+	m_node->SetNodeAttribute(pattribute);
+}
+
+
 Node::Node(FbxNode *pnode)
 {
 	m_node = pnode;
@@ -35,11 +56,16 @@ Node ^Node::GetChild(int index)
 	return gcnew Node(m_node->GetChild(index));
 }
 
+void Node::AddChild(Node ^node)
+{
+	m_node->AddChild(node->m_node);
+}
 
 Vector3 Node::Position::get()
 {
 	return Vector3(m_node->LclTranslation.Get());
 }
+
 void Node::Position::set(Vector3 value)
 {
 	m_node->LclTranslation.Set(value);

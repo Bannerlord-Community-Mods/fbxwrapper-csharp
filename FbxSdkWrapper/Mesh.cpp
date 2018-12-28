@@ -13,6 +13,30 @@ bool Mesh::Triangulated::get()
 	return m_mesh->IsTriangleMesh();
 }
 
+int Mesh::ControlPointsCount::get()
+{
+	return m_mesh->GetControlPointsCount();
+}
+
+void Mesh::ControlPointsCount::set(int count)
+{
+	if (count != m_mesh->GetControlPointsCount())
+		m_mesh->SetControlPointCount(count);
+}
+
+void Mesh::SetControlPointAt(double x, double y, double z, double w, int index)
+{
+	m_mesh->SetControlPointAt(FbxVector4(x, y, z, w), index);
+}
+
+void Mesh::AddPolygon(array<int>^ indices)
+{
+	m_mesh->BeginPolygon(-1, -1, -1, false);	
+	for each (int i in indices)
+		m_mesh->AddPolygon(i);
+	m_mesh->EndPolygon();
+}
+
 array<FbxWrapper::Polygon> ^Mesh::Polygons::get()
 {
 	int count = m_mesh->GetPolygonCount();
@@ -44,7 +68,6 @@ array<Vector3> ^Mesh::Vertices::get()
 		auto point = m_mesh->GetControlPointAt(i);
 		list[i] = Vector3(point);
 	}
-
 	return list;
 }
 

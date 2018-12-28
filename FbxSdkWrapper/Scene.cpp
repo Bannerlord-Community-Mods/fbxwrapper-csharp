@@ -6,7 +6,11 @@ using namespace System::Runtime::InteropServices;
 
 using namespace FbxWrapper;
 
-
+Scene::Scene()
+{
+	m_scene = FbxScene::Create(Manager::m_manager, nullptr);
+	m_rootNode = gcnew Node(m_scene->GetRootNode());
+}
 Scene::Scene(string ^name)
 {
 	m_scene = FbxScene::Create(Manager::m_manager, StringHelper::ToNative(name));

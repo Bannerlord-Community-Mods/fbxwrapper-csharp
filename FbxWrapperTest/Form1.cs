@@ -3,6 +3,12 @@ using System.Diagnostics;
 using System.Windows.Forms;
 
 using FbxWrapper;
+using CommonLib;
+
+using MyVector3 = CommonLib.Maths.Vector3;
+using MyPolygon = CommonLib.Wavefront.Polygon;
+
+using System.Collections.Generic;
 
 namespace FbxWrapperTest
 {
@@ -20,65 +26,83 @@ namespace FbxWrapperTest
         private void savefbxToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (scene == null) return;
+            int index;
+            string path = MyFileDialog.GetSaveFileName(DialogFileFormat.FBX_binary | DialogFileFormat.FBX_text, out index);
+            if (string.IsNullOrEmpty(path)) return;
 
-            using (SaveFileDialog savedialog = new SaveFileDialog())
+            try
             {
-                savedialog.DefaultExt = "fbx";
-                savedialog.Filter = "Autodesk Fbx (*.fbx)|*.fbx| ASCII Fbx (*.fbx)|*.fbx";
-                savedialog.RestoreDirectory = true;
-                savedialog.Title = "Save fbx file";
-
-                if (savedialog.ShowDialog()== DialogResult.OK)
-                {
-                    Debug.WriteLine("Save file : " + savedialog.FileName);
-
-                    try
-                    {
-                        //FileFormat.Null = -1 for autodetect by exporter
-                        FileFormat format = savedialog.FilterIndex == 1 ? FileFormat.Null : FileFormat.FbxAscii;
-                        Scene.Export(scene, savedialog.FileName, format);
-                    }
-                    catch(Exception exc)
-                    {
-                        Debug.WriteLine(exc.ToString());
-                    }
-                }
+                //FileFormat.Null = -1 for autodetect by exporter
+                FileFormat format = index == 1 ? FileFormat.Null : FileFormat.FbxAscii;
+                Scene.Export(scene, path, format);
+            }
+            catch (Exception exc)
+            {
+                Debug.WriteLine(exc.ToString());
             }
         }
 
         private void openfbxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog opendialog = new OpenFileDialog())
+            string path = MyFileDialog.GetOpenFileName(DialogFileFormat.FBX_binary);
+            if (string.IsNullOrEmpty(path)) return;
+
+            try
             {
-                opendialog.DefaultExt = "fbx";
-                opendialog.Filter = "Autodesk Fbx (*.fbx)|*.fbx";
-                opendialog.RestoreDirectory = true;
-                opendialog.Title = "Open fbx file";
-
-                if (opendialog.ShowDialog() == DialogResult.OK)
-                {
-                    Debug.WriteLine("Open file : " + opendialog.FileName);
-
-                    try
-                    {
-                        scene = Scene.Import(opendialog.FileName);
-
-                        Version version = scene.FileVersion;
-
-                        Debug.WriteLine(scene.FileVersion);
-
-                        Node root = scene.RootNode;
-                        treeView1.Nodes.Clear();
-                        treeView1.Nodes.Add(GetTreeNodeRecursive(root));
-                        treeView1.ExpandAll();
-                        savefbxToolStripMenuItem.Enabled = true;
-                    }
-                    catch (Exception exc)
-                    {
-                        Debug.WriteLine(exc.ToString());
-                    }
-                }
+                scene = Scene.Import(path);
+                Version version = scene.FileVersion;
+                Debug.WriteLine(scene.FileVersion);
+                Node root = scene.RootNode;
+                treeView1.Nodes.Clear();
+                treeView1.Nodes.Add(GetTreeNodeRecursive(root));
+                treeView1.ExpandAll();
+                savefbxToolStripMenuItem.Enabled = true;
             }
+            catch (Exception exc)
+            {
+                Debug.WriteLine(exc.ToString());
+            }
+
+        }
+
+        private void convertobjTofbxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            string path = MyFileDialog.GetOpenFileName(DialogFileFormat.OBJ);
+            if (string.IsNullOrEmpty(path)) return;
+
+            CommonLib.Wavefront.WavefrontObj obj = new CommonLib.Wavefront.WavefrontObj();
+            if (!obj.Load(path)) return;
+
+            //
+            // https://download.autodesk.com/us/fbx/20112/fbx_sdk_help/index.html?url=WS73099cc142f487551fea285e1221e4f9ff8-7f5b.htm,topicNumber=d0e4543
+            //
+            scene = new Scene();
+            Node rootnode = scene.RootNode;
+
+            Node meshnode = new Node(AttributeType.eMesh, "Wavefront_obj_mesh");
+            rootnode.AddChild(meshnode);
+
+            Mesh mesh = meshnode.Mesh;
+            mesh.ControlPointsCount = obj.vertices.Count;
+
+            for (int i=0;i< obj.vertices.Count;i++)
+            {
+                MyVector3 v = obj.vertices[i];
+                mesh.SetControlPointAt(v.x, v.y, v.z, 0, i);
+            }
+
+            var polygons = obj.groups[0].Polygons;
+
+            for (int i=0;i< polygons.Count;i++)
+            {
+                MyPolygon p = polygons[i];
+                mesh.AddPolygon(p.GetVerticesArray());
+            }
+
+            Debug.WriteLine("OK");
+
+            savefbxToolStripMenuItem.Enabled = true;
         }
 
         public TreeNode GetTreeNodeRecursive(Node node)
@@ -154,6 +178,6 @@ namespace FbxWrapperTest
             return str;
         }
 
-
+        
     }
 }

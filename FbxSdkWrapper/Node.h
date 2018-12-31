@@ -16,8 +16,7 @@ namespace FbxWrapper
 	public ref class Node
 	{
 	public:
-		/// <summary>
-		/// </summary> 
+
 		Node(AttributeType etype, string^ name);
 
 		//property string^ Name {string^ get(); }

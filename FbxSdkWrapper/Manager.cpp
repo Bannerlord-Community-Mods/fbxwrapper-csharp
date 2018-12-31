@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "Manager.h"
 
-
+using namespace System::Collections::Generic;
 using namespace FbxWrapper;
+
 
 static Manager::Manager()
 {
@@ -19,8 +20,7 @@ static Manager::Manager()
 	m_importer = FbxImporter::Create(m_manager, "Importer");
 	m_exporter = FbxExporter::Create(m_manager, "Exporter");
 
-	//FbxIOSettings* ios = FbxIOSettings::Create(m_nativeManager, IOSROOT);
-	//m_nativeManager->SetIOSettings(ios);
+	//List<FileFormat2^>^ m_supported = gcnew List<FileFormat^>(1);
 
 }
 
@@ -29,4 +29,34 @@ Manager::~Manager()
 	m_importer->Destroy();
 	m_exporter->Destroy();
 	m_manager->Destroy();
+}
+
+array<FileFormat^> ^Manager::GetSupportedWriters()
+{
+	int count = m_manager->GetIOPluginRegistry()->GetWriterFormatCount();
+	
+	array<FileFormat^> ^list = gcnew array<FileFormat^>(count);
+
+	for (int i = 0; i < count; i++)
+	{
+		FileFormat^ file = gcnew FileFormat();
+		file->Description = gcnew String(m_manager->GetIOPluginRegistry()->GetWriterFormatDescription(i));
+		file->Extension = gcnew String(m_manager->GetIOPluginRegistry()->GetWriterFormatExtension(i));
+		list[i] = file;
+	}
+	return list;
+}
+
+array<FileFormat^> ^Manager::GetSupportedReaders()
+{
+	int count = m_manager->GetIOPluginRegistry()->GetReaderFormatCount();
+	array<FileFormat^> ^list = gcnew array<FileFormat^>(count);
+	for (int i = 0; i < count; i++)
+	{
+		FileFormat^ file = gcnew FileFormat();
+		file->Description = gcnew String(m_manager->GetIOPluginRegistry()->GetReaderFormatDescription(i));
+		file->Extension = gcnew String(m_manager->GetIOPluginRegistry()->GetReaderFormatExtension(i));
+		list[i] = file;
+	}
+	return list;
 }

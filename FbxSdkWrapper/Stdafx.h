@@ -10,7 +10,7 @@
 #include "StringHelper.h"
 #include "Properties.h"
 #include "Types.h"
-#include "Vectors.h"
+#include "Vector.h"
 
 typedef System::String string;
 

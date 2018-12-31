@@ -24,10 +24,27 @@ void Mesh::ControlPointsCount::set(int count)
 		m_mesh->SetControlPointCount(count);
 }
 
-void Mesh::SetControlPointAt(double x, double y, double z, double w, int index)
+bool Mesh::SetControlPointAt(int index, double x, double y, double z, double w)
 {
 	m_mesh->SetControlPointAt(FbxVector4(x, y, z, w), index);
+	return index < m_mesh->GetControlPointsCount();
 }
+
+bool Mesh::GetControlPointAt(int index, float %x, float %y, float %z, float %w)
+{
+	FbxVector4 v = m_mesh->GetControlPointAt(index);
+	x = v[0];
+	y = v[1];
+	z = v[2];
+	w = v[3];
+	return index < m_mesh->GetControlPointsCount();
+}
+
+void Mesh::GetMappingMode(LayerElementType elayer)
+{
+	auto layer = m_mesh->GetLayer(0, (FbxLayerElement::EType)elayer);
+}
+
 
 void Mesh::AddPolygon(array<int>^ indices)
 {
@@ -58,19 +75,7 @@ array<FbxWrapper::Polygon> ^Mesh::Polygons::get()
 	return list;
 }
 
-array<Vector3> ^Mesh::Vertices::get()
-{
-	int count = m_mesh->GetControlPointsCount();
-	auto list = gcnew array<Vector3>(count);
-
-	for (int i = 0; i < count; i++)
-	{
-		auto point = m_mesh->GetControlPointAt(i);
-		list[i] = Vector3(point);
-	}
-	return list;
-}
-
+/*
 array<Vector3> ^Mesh::Normals::get()
 {
 	auto normals = m_mesh->GetLayer(0)->GetNormals();
@@ -134,3 +139,4 @@ array<int> ^Mesh::MaterialIDs::get()
 
 	return list;
 }
+*/

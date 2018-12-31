@@ -11,6 +11,7 @@
     <ClCompile Include="NodeAttribute.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Polygon.cpp" />
+    <ClCompile Include="FileFormat.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Properties.h">
@@ -40,16 +41,19 @@
     <ClInclude Include="NodeAttribute.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Types.h">
-      <Filter>Helper</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Vectors.h">
+    <ClInclude Include="Polygon.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Polygon.h">
+    <ClInclude Include="Types.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="FileFormat.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

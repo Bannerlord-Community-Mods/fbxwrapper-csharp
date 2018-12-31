@@ -6,21 +6,25 @@ using namespace System::Runtime::InteropServices;
 
 using namespace FbxWrapper;
 
-Scene::Scene()
-{
-	m_scene = FbxScene::Create(Manager::m_manager, nullptr);
-	m_rootNode = gcnew Node(m_scene->GetRootNode());
-}
+
 Scene::Scene(string ^name)
 {
-	m_scene = FbxScene::Create(Manager::m_manager, StringHelper::ToNative(name));
+	//if (System::String::IsNullOrWhiteSpace(name))
+	//	m_scene = FbxScene::Create(Manager::m_manager, nullptr);
+	//else
+		m_scene = FbxScene::Create(Manager::m_manager, StringHelper::ToNative(name));
+
 	m_rootNode = gcnew Node(m_scene->GetRootNode());
 }
 
-void Scene::Export(Scene^ scene, string^ filename, FileFormat format)
+/// <summary>
+/// Export a supported fbx file defined by fileformatID (-1 for native writer... i don't known that it's)
+/// found with Manager.GetSupportedWriters list
+/// </summary>
+void Scene::Export(Scene^ scene, string^ filename, int fileformat)
 {
 	FbxExporter* exporter = Manager::m_exporter;
-	if (!exporter->Initialize(StringHelper::ToNative(filename), (int)format, exporter->GetIOSettings()))
+	if (!exporter->Initialize(StringHelper::ToNative(filename), fileformat, exporter->GetIOSettings()))
 		throw gcnew FbxException("Failed to initialize the FBX exporter: {0}", gcnew string(exporter->GetStatus().GetErrorString()));
 
 	FbxIOFileHeaderInfo *infoExporter = exporter->GetFileHeaderInfo();
@@ -33,11 +37,11 @@ void Scene::Export(Scene^ scene, string^ filename, FileFormat format)
 
 }
 
-Scene ^Scene::Import(string ^filename)
+Scene ^Scene::Import(string ^filename, int fileformat)
 {
 	FbxImporter* importer = Manager::m_importer;
 
-	if (!importer->Initialize(StringHelper::ToNative(filename), -1, importer->GetIOSettings()))
+	if (!importer->Initialize(StringHelper::ToNative(filename), fileformat, importer->GetIOSettings()))
 		throw gcnew FbxException("Failed to initialise the FBX importer: {0}", gcnew string(importer->GetStatus().GetErrorString()));
 
 	Scene^ scene = gcnew Scene("");

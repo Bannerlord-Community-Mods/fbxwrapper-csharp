@@ -51,6 +51,10 @@
     <OutputPath>bin\x64\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CommonLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommonLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -95,10 +99,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SharpDxEngine\CommonLib\CommonLib.csproj">
-      <Project>{7e655b04-5914-4f26-9947-81c20b41f049}</Project>
-      <Name>CommonLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\FbxSdkWrapper\FbxSdkWrapper.vcxproj">
       <Project>{46228303-44c3-47ad-830d-9702b09f97b1}</Project>
       <Name>FbxSdkWrapper</Name>

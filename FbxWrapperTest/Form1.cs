@@ -1,62 +1,98 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 using FbxWrapper;
-using CommonLib;
+using Polygon = CommonLib.Wavefront.Polygon;
+using Vector3 = CommonLib.Maths.Vector3;
 
-using MyVector3 = CommonLib.Maths.Vector3;
-using MyPolygon = CommonLib.Wavefront.Polygon;
-
-using System.Collections.Generic;
 
 namespace FbxWrapperTest
 {
     public partial class Form1 : Form
     {
         Scene scene;
+        List<FileFormat> writers;
+        List<FileFormat> readers;
 
         public Form1()
         {
             InitializeComponent();
-            savefbxToolStripMenuItem.Enabled = false;
+            ExportStripMenuItem.Enabled = false;
             scene = null;
+
+            writers = new List<FileFormat>(Manager.GetSupportedWriters());
+            readers = new List<FileFormat>(Manager.GetSupportedReaders());
+
+            ReaderBox.Items.Add("Supported Readers :");
+            ReaderBox.Items.Add("");
+            WriterBox.Items.Add("Supported Writers :");
+            WriterBox.Items.Add("");
+            foreach (FileFormat info in readers)
+            {
+                string str = string.Format("{0}|*.{1}", info.Description, info.Extension);
+                ReaderBox.Items.Add(str);
+            }
+            foreach (FileFormat info in writers)
+            {
+                string str = string.Format("{0}|*.{1}", info.Description, info.Extension);
+                WriterBox.Items.Add(str);
+            }
         }
 
-        private void savefbxToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExportStripMenuItem_Click(object sender, EventArgs e)
         {
             if (scene == null) return;
-            int index;
-            string path = MyFileDialog.GetSaveFileName(DialogFileFormat.FBX_binary | DialogFileFormat.FBX_text, out index);
+
+            string filter = "";
+
+            for (int i = 0; i < writers.Count; i++)
+            {
+                if (i > 0) filter += "|";
+                filter += string.Format("{0}|*.{1}", writers[i].Description, writers[i].Extension);
+            }
+
+            // fileID is the file format index that match with writers plugin list, can be different for each Sdk version
+            int fileID;
+            string path = MyFileDialog.GetSaveFileName(filter, out fileID);
             if (string.IsNullOrEmpty(path)) return;
 
             try
             {
-                //FileFormat.Null = -1 for autodetect by exporter
-                FileFormat format = index == 1 ? FileFormat.Null : FileFormat.FbxAscii;
-                Scene.Export(scene, path, format);
+                Scene.Export(scene, path, fileID - 1);
             }
             catch (Exception exc)
             {
                 Debug.WriteLine(exc.ToString());
             }
+
         }
 
-        private void openfbxToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenStripMenuItem_Click(object sender, EventArgs e)
         {
-            string path = MyFileDialog.GetOpenFileName(DialogFileFormat.FBX_binary);
+            // fileID is the file format index that match with readers plugin list can be different for each Sdk version
+            int fileID;
+            string filter = "";
+            for (int i = 0; i < readers.Count; i++)
+            {
+                if (i > 0) filter += "|";
+                filter += string.Format("{0}|*.{1}", readers[i].Description, readers[i].Extension);
+            }
+
+            string path = MyFileDialog.GetOpenFileName(filter, out fileID);
             if (string.IsNullOrEmpty(path)) return;
 
             try
             {
-                scene = Scene.Import(path);
+                scene = Scene.Import(path, -1);
                 Version version = scene.FileVersion;
                 Debug.WriteLine(scene.FileVersion);
                 Node root = scene.RootNode;
                 treeView1.Nodes.Clear();
                 treeView1.Nodes.Add(GetTreeNodeRecursive(root));
                 treeView1.ExpandAll();
-                savefbxToolStripMenuItem.Enabled = true;
+                ExportStripMenuItem.Enabled = true;
             }
             catch (Exception exc)
             {
@@ -68,7 +104,7 @@ namespace FbxWrapperTest
         private void convertobjTofbxToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            string path = MyFileDialog.GetOpenFileName(DialogFileFormat.OBJ);
+            string path = MyFileDialog.GetOpenFileName("Wavefront Obj (*.obj)|*.obj");
             if (string.IsNullOrEmpty(path)) return;
 
             CommonLib.Wavefront.WavefrontObj obj = new CommonLib.Wavefront.WavefrontObj();
@@ -77,7 +113,7 @@ namespace FbxWrapperTest
             //
             // https://download.autodesk.com/us/fbx/20112/fbx_sdk_help/index.html?url=WS73099cc142f487551fea285e1221e4f9ff8-7f5b.htm,topicNumber=d0e4543
             //
-            scene = new Scene();
+            scene = new Scene(null);
             Node rootnode = scene.RootNode;
 
             Node meshnode = new Node(AttributeType.eMesh, "Wavefront_obj_mesh");
@@ -86,23 +122,28 @@ namespace FbxWrapperTest
             Mesh mesh = meshnode.Mesh;
             mesh.ControlPointsCount = obj.vertices.Count;
 
-            for (int i=0;i< obj.vertices.Count;i++)
+            for (int i = 0; i < obj.vertices.Count; i++)
             {
-                MyVector3 v = obj.vertices[i];
-                mesh.SetControlPointAt(v.x, v.y, v.z, 0, i);
+                Vector3 v = obj.vertices[i];
+                mesh.SetControlPointAt(i, v.x, v.y, v.z, 0);
+
+                Vector3 V = new Vector3();
+                float w = 0;
+                mesh.GetControlPointAt(i, ref V.x, ref V.y, ref V.z, ref w);
+
             }
 
             var polygons = obj.groups[0].Polygons;
 
             for (int i=0;i< polygons.Count;i++)
             {
-                MyPolygon p = polygons[i];
+                Polygon p = polygons[i];
                 mesh.AddPolygon(p.GetVerticesArray());
             }
 
             Debug.WriteLine("OK");
 
-            savefbxToolStripMenuItem.Enabled = true;
+            ExportStripMenuItem.Enabled = true;
         }
 
         public TreeNode GetTreeNodeRecursive(Node node)
@@ -153,9 +194,16 @@ namespace FbxWrapperTest
             TreeNode polygonode = new TreeNode("indices");
             TreeNode textcoordnode = new TreeNode("textcoord");
 
-            Vector3[] vertices = staticmesh.Vertices;
-            foreach (Vector3 v in vertices) vertexnode.Nodes.Add(v.ToString());
+            int vcount = staticmesh.ControlPointsCount;
+            for (int i=0;i<vcount;i++)
+            {
+                CommonLib.Maths.Vector4 v = new CommonLib.Maths.Vector4();
+                staticmesh.GetControlPointAt(i, ref v.x, ref v.y, ref v.z, ref v.w);
+                vertexnode.Nodes.Add(v.ToString());
+            }
+            header.Nodes.Add(vertexnode);
 
+            /*
             Vector2[] textcoord = staticmesh.TextureCoords;
             foreach (Vector2 v in textcoord) textcoordnode.Nodes.Add(v.ToString());
 
@@ -164,20 +212,18 @@ namespace FbxWrapperTest
 
             Polygon[] indices = staticmesh.Polygons;
             foreach (Polygon t in indices) polygonode.Nodes.Add(PolygonToString(t));
+            */
 
-            header.Nodes.Add(vertexnode);
             header.Nodes.Add(normalnode);
             header.Nodes.Add(polygonode);
             header.Nodes.Add(textcoordnode);
         }
 
-        public string PolygonToString(Polygon polygon)
+        public string PolygonToString(FbxWrapper.Polygon polygon)
         {
             int[] index = polygon.Indices;
             string str = string.Join(",", index);
             return str;
         }
-
-        
     }
 }

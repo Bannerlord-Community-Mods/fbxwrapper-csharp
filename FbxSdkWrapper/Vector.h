@@ -6,7 +6,7 @@ using namespace System;
 
 namespace FbxWrapper
 {
-	 public value struct Colour
+	public value struct Colour
 	{
 	public:
 		Colour(double r, double g, double b, double a)
@@ -42,7 +42,7 @@ namespace FbxWrapper
 		}
 	};
 
-	 public value struct Vector3
+	public value struct Vector3
 	{
 	public:
 		Vector3(double x, double y, double z)
@@ -83,7 +83,7 @@ namespace FbxWrapper
 		}
 	};
 
-	 public value struct Vector2
+	public value struct Vector2
 	{
 		Vector2(double x, double y)
 		{
@@ -112,7 +112,7 @@ namespace FbxWrapper
 		}
 	};
 
-	 public value struct Vector4
+	public value struct Vector4
 	{
 		Vector4(double w, double x, double y, double z)
 		{

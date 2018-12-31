@@ -28,18 +28,50 @@ namespace FbxWrapper
 		eCachedEffect,
 		eLine
 	};
-	public enum class FileFormat : int
+	
+	/// <summary>
+	/// Layer Type (EType)
+	/// </summary>
+	public enum class LayerElementType : int
 	{
-		Null = -1,
+		eUnknown,
 
-		FbxBinary = 0,
-		FbxAscii = 1,
-		FbxEncrypted = 2,
-		Fbx5Binary = 3,
-		Fbx5Ascii = 4,
-		AutocadDXF = 5,
-		StudioMax3DS = 6,
-		AliasOBJ = 7,
-		ColladaDAE = 8
+		//Non-Texture layer element types
+		//Note: Make sure to update static index below if you change this enum!
+		eNormal,
+		eBiNormal,
+		eTangent,
+		eMaterial,
+		ePolygonGroup,
+		eUV,
+		eVertexColor,
+		eSmoothing,
+		eVertexCrease,
+		eEdgeCrease,
+		eHole,
+		eUserData,
+		eVisibility,
+
+		//Texture layer element types
+		//Note: Make sure to update static index below if you change this enum!
+		eTextureDiffuse,
+		eTextureDiffuseFactor,
+		eTextureEmissive,
+		eTextureEmissiveFactor,
+		eTextureAmbient,
+		eTextureAmbientFactor,
+		eTextureSpecular,
+		eTextureSpecularFactor,
+		eTextureShininess,
+		eTextureNormalMap,
+		eTextureBump,
+		eTextureTransparency,
+		eTextureTransparencyFactor,
+		eTextureReflection,
+		eTextureReflectionFactor,
+		eTextureDisplacement,
+		eTextureDisplacementVector,
+
+		eTypeCount
 	};
 }

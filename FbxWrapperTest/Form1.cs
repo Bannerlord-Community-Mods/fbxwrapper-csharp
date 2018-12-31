@@ -210,6 +210,9 @@ namespace FbxWrapperTest
         private void makeCustomSceneToolStripMenuItem_Click(object sender, EventArgs e)
         {
             BuildCustomFbx();
+            treeView1.Nodes.Clear();
+            treeView1.Nodes.Add(GetTreeNodeRecursive(scene.RootNode));
+            treeView1.ExpandAll();
             ExportStripMenuItem.Enabled = true;
 
         }

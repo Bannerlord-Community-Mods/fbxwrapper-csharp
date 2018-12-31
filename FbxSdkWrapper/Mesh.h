@@ -16,6 +16,16 @@ namespace FbxWrapper
 
 	public:
 		/// <summary>
+		/// Get how the layer element (normals, texture, etc...) are stored.
+		/// http://docs.autodesk.com/FBX/2014/ENU/FBX-SDK-Documentation/index.html?url=cpp_ref/_normals_2main_8cxx-example.html,topicNumber=cpp_ref__normals_2main_8cxx_example_html2cff27fd-bb1a-4142-982e-65fd5d6ad951
+		/// If ByControlPoint the n'th element match with n'th control point
+		/// </summary>
+		MappingMode GetMappingMode(LayerElementType layer);
+		/// <summary>
+		/// </summary>
+		void SetMappingMode(LayerElementType elementType, MappingMode mode);
+
+		/// <summary>
 		/// Gets and sets the control points size, if size is different the items are not cleaned !
 		/// </summary>
 		property_rw(int, ControlPointsCount);
@@ -28,18 +38,15 @@ namespace FbxWrapper
 		/// I use this version to allow any custom vertices storage (list, array, etc..) using "ref"
 		/// </summary>
 		bool GetControlPointAt(int index, float %x, float %y, float %z, float %w);
+		Vector4 Mesh::GetControlPointAt(int index);
+		
+		property_rw(array<Vector3>^, ControlPoints);
+		property_rw(array<Vector3>^, Normals);
 
-		/// <summary>
-		/// Get how the layer element (normals, texture, etc...) are stored.
-		/// http://docs.autodesk.com/FBX/2014/ENU/FBX-SDK-Documentation/index.html?url=cpp_ref/_normals_2main_8cxx-example.html,topicNumber=cpp_ref__normals_2main_8cxx_example_html2cff27fd-bb1a-4142-982e-65fd5d6ad951
-		/// If Direct (and IndexToDirect) the n'th element match with n'th control point
-		/// </summary>
-		void Mesh::GetMappingMode(LayerElementType layer);
 
 		void AddPolygon(array<int> ^indices);
-
 		property_r(array<Polygon>^, Polygons);
-		//property_r(array<Vector3>^, Normals);
+
 		//property_r(array<Vector2>^, TextureCoords);
 		//property_r(array<Colour>^, VertexColours);
 		//property_r(array<Vector3>^, Tangents);

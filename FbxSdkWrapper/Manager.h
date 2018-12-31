@@ -11,7 +11,6 @@ namespace FbxWrapper
 		~Manager();
 		
 		// using List<> Generate compiling error 
-
 		/// <summary>
 		/// Plugin writer list, must be used to know the fileformatid when save file
 		/// </summary> 

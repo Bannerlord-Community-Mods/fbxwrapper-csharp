@@ -13,6 +13,32 @@ bool Mesh::Triangulated::get()
 	return m_mesh->IsTriangleMesh();
 }
 
+
+MappingMode Mesh::GetMappingMode(LayerElementType elementType)
+{
+	FbxLayerElement::EType etype = (FbxLayerElement::EType)elementType;
+
+	if (auto layer = m_mesh->GetLayer(0, etype))
+	{
+		return (MappingMode)layer->GetLayerElementOfType(etype)->GetMappingMode();
+	}
+	return MappingMode::None;
+}
+
+void Mesh::SetMappingMode(LayerElementType elementType, MappingMode mode)
+{
+	FbxLayerElement::EType etype = (FbxLayerElement::EType)elementType;
+	
+	if (auto layer = m_mesh->GetLayer(0, etype))
+	{
+		layer->GetLayerElementOfType(etype)->SetMappingMode((FbxLayerElement::EMappingMode)mode);
+	}
+}
+
+
+#pragma region  Vertices
+
+
 int Mesh::ControlPointsCount::get()
 {
 	return m_mesh->GetControlPointsCount();
@@ -40,11 +66,112 @@ bool Mesh::GetControlPointAt(int index, float %x, float %y, float %z, float %w)
 	return index < m_mesh->GetControlPointsCount();
 }
 
-void Mesh::GetMappingMode(LayerElementType elayer)
+Vector4 Mesh::GetControlPointAt(int index)
 {
-	auto layer = m_mesh->GetLayer(0, (FbxLayerElement::EType)elayer);
+	return Vector4(m_mesh->GetControlPointAt(index));
 }
 
+array<Vector3> ^Mesh::ControlPoints::get()
+{
+	int count = m_mesh->GetControlPointsCount();
+	auto list = gcnew array<Vector3>(count);
+	for (int i = 0; i < count; i++)
+		list[i] = Vector3(m_mesh->GetControlPointAt(i));
+	return list;
+}
+
+void Mesh::ControlPoints::set(array<Vector3> ^controlpoints)
+{
+	int count = controlpoints->Length;
+	for (int i = 0; i < count; i++)
+	{
+		Vector3 v = controlpoints[i];
+		m_mesh->SetControlPointAt((FbxVector4)v, i);
+	}
+}
+
+#pragma endregion
+
+#pragma region Normals
+
+array<Vector3> ^Mesh::Normals::get()
+{
+	auto element = m_mesh->GetLayer(0)->GetNormals();
+
+	//Let's get normals of each vertex, since the mapping mode of normal element is by control point
+	if (element->GetMappingMode() == FbxGeometryElement::eByControlPoint)
+	{
+		int count = m_mesh->GetControlPointsCount();
+		auto list = gcnew array<Vector3>(count);
+
+		for (int v = 0, n; v < count; v++)
+		{
+			//reference mode is direct, the normal index is same as vertex index.
+			//get normals by the index of control vertex
+			if (element->GetReferenceMode() == FbxGeometryElement::eDirect) n = v;
+			//reference mode is index-to-direct, get normals by the index-to-direct
+			if (element->GetReferenceMode() == FbxGeometryElement::eIndexToDirect)n = element->GetIndexArray().GetAt(v);
+			list[v] = Vector3(element->GetDirectArray().GetAt(n));
+		}
+	}
+	//mapping mode is by polygon-vertex.we can get normals by retrieving polygon-vertex.
+	else if (element->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
+	{
+		int count = element->mDirectArray->GetCount(); //IS CORRECT ????
+		auto list = gcnew array<Vector3>(count);
+
+		int idxByPolygon = 0;
+
+		//Let's get normals of each polygon, since the mapping mode of normal element is by polygon-vertex.
+		for (int p = 0; p < m_mesh->GetPolygonCount(); p++)
+		{
+			//get polygon size, you know how many vertices in current polygon.
+			int size = m_mesh->GetPolygonSize(p);
+			//retrieve each vertex of current polygon.
+			
+			for (int i = 0; i < size; i++)
+			{
+				int n = 0;
+				//reference mode is direct, the normal index is same as lIndexByPolygonVertex.
+				if (element->GetReferenceMode() == FbxGeometryElement::eDirect)
+					n = idxByPolygon;
+
+				//reference mode is index-to-direct, get normals by the index-to-direct
+				if (element->GetReferenceMode() == FbxGeometryElement::eIndexToDirect)
+					n = element->GetIndexArray().GetAt(idxByPolygon);
+
+				if (idxByPolygon >= count)
+					throw gcnew Exception("index of normal is out of range");
+
+				list[idxByPolygon] = Vector3(element->GetDirectArray().GetAt(n));
+
+				idxByPolygon++;
+			}
+		}
+	}
+}
+
+void Mesh::Normals::set(array<Vector3> ^normals)
+{
+	auto element = m_mesh->GetLayer(0)->GetNormals();
+
+	if (element->GetMappingMode() == FbxGeometryElement::eByControlPoint)
+	{
+		int count = m_mesh->GetControlPointsCount();
+		if (normals->Length >count)
+			throw gcnew Exception("In ByControlPoint mapping mode, normals elements must be equal to (or less than) control points");
+		
+		for (int v = 0, n; v < count; v++)
+		{		
+			if (element->GetReferenceMode() == FbxGeometryElement::eDirect) n = v;
+			if (element->GetReferenceMode() == FbxGeometryElement::eIndexToDirect) n = element->GetIndexArray().GetAt(v);
+			Vector3 vector = normals[v];
+			element->GetDirectArray().SetAt(n, (FbxVector4)vector);
+		}
+
+	}
+}
+#pragma endregion
 
 void Mesh::AddPolygon(array<int>^ indices)
 {

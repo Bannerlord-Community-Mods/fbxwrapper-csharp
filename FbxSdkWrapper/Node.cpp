@@ -11,7 +11,7 @@ Node::Node(AttributeType etype, string ^name)
 	FbxNodeAttribute *pattribute;
 	switch (etype)
 	{
-	case AttributeType::eMesh:
+	case AttributeType::Mesh:
 		pattribute = FbxMesh::Create(Manager::m_manager, StringHelper::ToNative(name));
 		break;
 

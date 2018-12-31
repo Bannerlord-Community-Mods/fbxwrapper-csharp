@@ -61,12 +61,12 @@ namespace FbxWrapperTest
             try
             {
                 Scene.Export(scene, path, fileID - 1);
+                Debug.WriteLine("OK");
             }
             catch (Exception exc)
             {
                 Debug.WriteLine(exc.ToString());
             }
-
         }
 
         private void OpenStripMenuItem_Click(object sender, EventArgs e)
@@ -93,6 +93,7 @@ namespace FbxWrapperTest
                 treeView1.Nodes.Add(GetTreeNodeRecursive(root));
                 treeView1.ExpandAll();
                 ExportStripMenuItem.Enabled = true;
+                Debug.WriteLine("OK");
             }
             catch (Exception exc)
             {
@@ -101,49 +102,29 @@ namespace FbxWrapperTest
 
         }
 
-        private void convertobjTofbxToolStripMenuItem_Click(object sender, EventArgs e)
+        private void BuildCustomFbx()
         {
-
-            string path = MyFileDialog.GetOpenFileName("Wavefront Obj (*.obj)|*.obj");
-            if (string.IsNullOrEmpty(path)) return;
-
-            CommonLib.Wavefront.WavefrontObj obj = new CommonLib.Wavefront.WavefrontObj();
-            if (!obj.Load(path)) return;
-
-            //
-            // https://download.autodesk.com/us/fbx/20112/fbx_sdk_help/index.html?url=WS73099cc142f487551fea285e1221e4f9ff8-7f5b.htm,topicNumber=d0e4543
-            //
             scene = new Scene(null);
             Node rootnode = scene.RootNode;
 
-            Node meshnode = new Node(AttributeType.eMesh, "Wavefront_obj_mesh");
+            Node meshnode = new Node(AttributeType.Mesh, "");
             rootnode.AddChild(meshnode);
 
             Mesh mesh = meshnode.Mesh;
-            mesh.ControlPointsCount = obj.vertices.Count;
+            //mesh.SetMappingMode(LayerElementType.Normal, MappingMode.ByControlPoint);
 
-            for (int i = 0; i < obj.vertices.Count; i++)
+            mesh.ControlPointsCount = 4;
+
+            FbxWrapper.Vector3[] vertices = new FbxWrapper.Vector3[]
             {
-                Vector3 v = obj.vertices[i];
-                mesh.SetControlPointAt(i, v.x, v.y, v.z, 0);
-
-                Vector3 V = new Vector3();
-                float w = 0;
-                mesh.GetControlPointAt(i, ref V.x, ref V.y, ref V.z, ref w);
-
-            }
-
-            var polygons = obj.groups[0].Polygons;
-
-            for (int i=0;i< polygons.Count;i++)
-            {
-                Polygon p = polygons[i];
-                mesh.AddPolygon(p.GetVerticesArray());
-            }
-
+                new FbxWrapper.Vector3(0,0,0),
+                new FbxWrapper.Vector3(1,0,0),
+                new FbxWrapper.Vector3(0,1,0),
+                new FbxWrapper.Vector3(1,1,0)
+            };
+            mesh.ControlPoints = vertices;
             Debug.WriteLine("OK");
 
-            ExportStripMenuItem.Enabled = true;
         }
 
         public TreeNode GetTreeNodeRecursive(Node node)
@@ -158,7 +139,7 @@ namespace FbxWrapperTest
             {
                 viewNode = new TreeNode(string.Format("{0} {1}", node.Name, attribute.Type.ToString())) ;
 
-                if (attribute.Type == AttributeType.eMesh)
+                if (attribute.Type == AttributeType.Mesh)
                 {
                     UnpackMesh(viewNode, node);
                 }
@@ -224,6 +205,13 @@ namespace FbxWrapperTest
             int[] index = polygon.Indices;
             string str = string.Join(",", index);
             return str;
+        }
+
+        private void makeCustomSceneToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BuildCustomFbx();
+            ExportStripMenuItem.Enabled = true;
+
         }
     }
 }

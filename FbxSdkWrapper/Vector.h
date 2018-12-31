@@ -56,10 +56,10 @@ namespace FbxWrapper
 		property double Y;
 		property double Z;
 
-		operator FbxDouble3()
-		{
-			return FbxDouble3(X, Y, Z);
-		}
+		inline operator FbxDouble3() { return FbxDouble3(X, Y, Z); }
+
+		inline operator FbxVector4() { return FbxVector4(X, Y, Z, 0); }
+
 
 		virtual String ^ToString() override
 		{
@@ -114,6 +114,15 @@ namespace FbxWrapper
 
 	public value struct Vector4
 	{
+	internal:
+		Vector4(FbxVector4 vector)
+		{
+			X = vector.mData[0];
+			Y = vector.mData[1];
+			Z = vector.mData[2];
+			W = vector.mData[3];
+		}
+	public:
 		Vector4(double w, double x, double y, double z)
 		{
 			W = w;
@@ -121,6 +130,7 @@ namespace FbxWrapper
 			Y = y;
 			Z = z;
 		}
+
 
 		operator FbxDouble4()
 		{

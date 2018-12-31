@@ -16,12 +16,8 @@ static Manager::Manager()
 	FbxIOSettings * ios = FbxIOSettings::Create(m_manager, IOSROOT);
 	m_manager->SetIOSettings(ios);
 
-
 	m_importer = FbxImporter::Create(m_manager, "Importer");
 	m_exporter = FbxExporter::Create(m_manager, "Exporter");
-
-	//List<FileFormat2^>^ m_supported = gcnew List<FileFormat^>(1);
-
 }
 
 Manager::~Manager()

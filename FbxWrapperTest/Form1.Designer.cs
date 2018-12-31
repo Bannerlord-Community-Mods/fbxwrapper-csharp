@@ -35,6 +35,7 @@
             this.ExportStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ReaderBox = new System.Windows.Forms.ListBox();
             this.WriterBox = new System.Windows.Forms.ListBox();
+            this.makeCustomSceneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,7 +61,8 @@
             // 
             this.FileStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.OpenStripMenuItem,
-            this.ExportStripMenuItem});
+            this.ExportStripMenuItem,
+            this.makeCustomSceneToolStripMenuItem});
             this.FileStripMenuItem.Name = "FileStripMenuItem";
             this.FileStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.FileStripMenuItem.Text = "File";
@@ -68,14 +70,14 @@
             // OpenStripMenuItem
             // 
             this.OpenStripMenuItem.Name = "OpenStripMenuItem";
-            this.OpenStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.OpenStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.OpenStripMenuItem.Text = "Open";
             this.OpenStripMenuItem.Click += new System.EventHandler(this.OpenStripMenuItem_Click);
             // 
             // ExportStripMenuItem
             // 
             this.ExportStripMenuItem.Name = "ExportStripMenuItem";
-            this.ExportStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.ExportStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.ExportStripMenuItem.Text = "Export";
             this.ExportStripMenuItem.Click += new System.EventHandler(this.ExportStripMenuItem_Click);
             // 
@@ -96,6 +98,13 @@
             this.WriterBox.Name = "WriterBox";
             this.WriterBox.Size = new System.Drawing.Size(160, 352);
             this.WriterBox.TabIndex = 5;
+            // 
+            // makeCustomSceneToolStripMenuItem
+            // 
+            this.makeCustomSceneToolStripMenuItem.Name = "makeCustomSceneToolStripMenuItem";
+            this.makeCustomSceneToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.makeCustomSceneToolStripMenuItem.Text = "MakeCustomScene";
+            this.makeCustomSceneToolStripMenuItem.Click += new System.EventHandler(this.makeCustomSceneToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -125,6 +134,7 @@
         private System.Windows.Forms.ToolStripMenuItem OpenStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ExportStripMenuItem;
         private System.Windows.Forms.ListBox WriterBox;
+        private System.Windows.Forms.ToolStripMenuItem makeCustomSceneToolStripMenuItem;
     }
 }
 

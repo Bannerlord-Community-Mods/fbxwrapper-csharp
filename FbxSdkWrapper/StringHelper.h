@@ -1,15 +1,11 @@
 #pragma once
-#pragma warning( suppress : 4091)
-
 #include <msclr/marshal_cppstd.h>
-
-typedef System::String string;
 
 using namespace msclr::interop;
 
 namespace FbxWrapper
 {
-	static ref class StringHelper
+	ref class StringHelper
 	{
 	public:
 		static const char *ToNative(System::String ^string)
@@ -19,6 +15,6 @@ namespace FbxWrapper
 		}
 
 	private:
-		 static marshal_context ^m_context;
+		static marshal_context ^m_context;
 	};
 }

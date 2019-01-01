@@ -191,6 +191,7 @@
   <ItemGroup>
     <ClInclude Include="Exception.h" />
     <ClInclude Include="FileFormat.h" />
+    <ClInclude Include="IOSetting.h" />
     <ClInclude Include="Manager.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="Mesh.h" />
@@ -207,6 +208,7 @@
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="FileFormat.cpp" />
+    <ClCompile Include="IOSetting.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="NodeAttribute.cpp" />

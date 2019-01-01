@@ -12,6 +12,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="FileFormat.cpp" />
+    <ClCompile Include="IOSetting.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Properties.h">
@@ -26,43 +27,23 @@
     <ClInclude Include="Stdafx.h">
       <Filter>Helper</Filter>
     </ClInclude>
-    <ClInclude Include="Manager.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Node.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
+    <ClInclude Include="IOSetting.h" />
+    <ClInclude Include="Manager.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="FileFormat.h" />
+    <ClInclude Include="NodeAttribute.h" />
+    <ClInclude Include="Polygon.h" />
+    <ClInclude Include="Types.h" />
+    <ClInclude Include="Vector.h" />
     <ClInclude Include="resource.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="NodeAttribute.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Polygon.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Types.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="FileFormat.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector.h">
-      <Filter>Headers</Filter>
+      <Filter>Helper</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Helper">
       <UniqueIdentifier>{83a7d2a3-490d-4e48-ba87-9bb7f72e70a4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers">
-      <UniqueIdentifier>{3088871d-0af1-4761-bc3e-e4acd24429f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

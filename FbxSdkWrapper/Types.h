@@ -2,6 +2,20 @@
 
 namespace FbxWrapper
 {
+	/// <summary>
+	/// Use it when exporting fbx, by default all prop are set to true
+	/// </summary>
+	public enum class IOProperty
+	{
+		Exp_FBX_MATERIAL,
+		Exp_FBX_TEXTURE,
+		Exp_FBX_EMBEDDED,
+		Exp_FBX_SHAPE,
+		Exp_FBX_GOBO,
+		Exp_FBX_ANIMATION,
+		Exp_FBX_GLOBAL_SETTINGS
+	};
+
 	// The types that are to be used for the attributes
 	public enum class AttributeType : int
 	{
@@ -31,10 +45,13 @@ namespace FbxWrapper
 	
 
 	/// <summary>
-	// Determines how the element is mapped to a surface.
+	/// Determines how the element is mapped to a surface.
 	/// </summary>
 	public enum class MappingMode
 	{
+		/// <summary>
+		/// not implemented
+		/// </summary>
 		None,
 		/// <summary>
 		/// There will be one mapping coordinate for each surface control point / vertex..
@@ -48,8 +65,24 @@ namespace FbxWrapper
 		/// There can be only one mapping coordinate for the whole polygon.
 		/// </summary>
 		ByPolygon,
+		/// <summary>
+		/// not implemented
+		/// </summary>
 		ByEdge,
+		/// <summary>
+		/// not implemented
+		/// </summary>
 		AllSame
+	};
+	
+	/// <summary>
+	/// Determines how the mapping information is stored in the array of coordinates.
+	/// </summary>
+	public enum class ReferenceMode
+	{
+		Direct,
+		Index,
+		IndexToDirect
 	};
 
 	/// <summary>

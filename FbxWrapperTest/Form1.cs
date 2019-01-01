@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using FbxWrapper;
 using Polygon = CommonLib.Wavefront.Polygon;
 using Vector3 = CommonLib.Maths.Vector3;
-
+using FbxVector3 = FbxWrapper.Vector3;
 
 namespace FbxWrapperTest
 {
@@ -115,17 +115,48 @@ namespace FbxWrapperTest
 
             mesh.ControlPointsCount = 4;
 
-            FbxWrapper.Vector3[] vertices = new FbxWrapper.Vector3[]
+            FbxVector3[] vertices = new FbxVector3[]
             {
-                new FbxWrapper.Vector3(0,0,0),
-                new FbxWrapper.Vector3(1,0,0),
-                new FbxWrapper.Vector3(0,1,0),
-                new FbxWrapper.Vector3(1,1,0)
+                new FbxVector3(0,0,0),
+                new FbxVector3(1,0,0),
+                new FbxVector3(0,1,0),
+                new FbxVector3(1,1,0)
             };
             mesh.ControlPoints = vertices;
-            Debug.WriteLine("OK");
 
+            // one square
+            //mesh.AddPolygon(new int[] { 0, 1, 3, 2 });
+            // triangulated
+            mesh.AddPolygon(new int[] { 0, 1, 2 });
+            mesh.AddPolygon(new int[] { 2, 1, 3 });
+
+
+            // i'm using my library
+            Vector3 n1 = new Vector3(-1, -1, 0);
+            Vector3 n2 = new Vector3(1, -1, 0);
+            Vector3 n3 = new Vector3(-1, 1, 0);
+            Vector3 n4 = new Vector3(1, 1, 0);
+            n1.Normalize();
+            n2.Normalize();
+            n3.Normalize();
+            n4.Normalize();
+
+            // byControlPoint
+            //FbxVector3[] normals = new FbxVector3[] { Convert(n1), Convert(n2), Convert(n3), Convert(n4) };
+            
+            // byPolygon
+            FbxVector3[] normals = new FbxVector3[] { Convert(n1), Convert(n4) };
+
+            mesh.SetNormals(normals, MappingMode.ByPolygon, ReferenceMode.Direct);
+
+
+    
+            Manager.SetIOProperty(IOProperty.Exp_FBX_ANIMATION, false);
+            Manager.SetIOProperty(IOProperty.Exp_FBX_EMBEDDED, false);
+            Manager.SetIOProperty(IOProperty.Exp_FBX_MATERIAL, false);
         }
+
+
 
         public TreeNode GetTreeNodeRecursive(Node node)
         {
@@ -169,32 +200,28 @@ namespace FbxWrapperTest
             header.Nodes.Add(string.Format("Scale : {0}", node.Scale.ToString()));
             header.Nodes.Add(string.Format("Rot : {0}", node.Rotation.ToString()));
 
-
+            // Write vertices
             TreeNode vertexnode = new TreeNode("vertices");
-            TreeNode normalnode = new TreeNode("normals");
-            TreeNode polygonode = new TreeNode("indices");
-            TreeNode textcoordnode = new TreeNode("textcoord");
-
             int vcount = staticmesh.ControlPointsCount;
             for (int i=0;i<vcount;i++)
             {
-                CommonLib.Maths.Vector4 v = new CommonLib.Maths.Vector4();
-                staticmesh.GetControlPointAt(i, ref v.x, ref v.y, ref v.z, ref v.w);
+                FbxWrapper.Vector3 v = staticmesh.GetControlPointAt(i);
                 vertexnode.Nodes.Add(v.ToString());
             }
             header.Nodes.Add(vertexnode);
 
-            /*
-            Vector2[] textcoord = staticmesh.TextureCoords;
-            foreach (Vector2 v in textcoord) textcoordnode.Nodes.Add(v.ToString());
+            // Write normals
+            TreeNode normalnode = new TreeNode("normals " + staticmesh.GetMappingMode(LayerElementType.Normal).ToString());
+            FbxVector3[] normals = staticmesh.GetNormals();
+            foreach (FbxVector3 v in normals) normalnode.Nodes.Add(v.ToString());
 
-            Vector3[] normals = staticmesh.Normals;
-            foreach (Vector3 v in normals) normalnode.Nodes.Add(v.ToString());
+            // Write indices
+            TreeNode polygonode = new TreeNode("indices");
+            var polygons = staticmesh.Polygons;
+            foreach (FbxWrapper.Polygon p in polygons) polygonode.Nodes.Add(arraytostring(p.Indices));
 
-            Polygon[] indices = staticmesh.Polygons;
-            foreach (Polygon t in indices) polygonode.Nodes.Add(PolygonToString(t));
-            */
 
+            TreeNode textcoordnode = new TreeNode("textcoord");
             header.Nodes.Add(normalnode);
             header.Nodes.Add(polygonode);
             header.Nodes.Add(textcoordnode);
@@ -214,7 +241,15 @@ namespace FbxWrapperTest
             treeView1.Nodes.Add(GetTreeNodeRecursive(scene.RootNode));
             treeView1.ExpandAll();
             ExportStripMenuItem.Enabled = true;
+        }
 
+        FbxVector3 Convert(Vector3 v) { return new FbxVector3(v.x, v.y, v.z); }
+
+        string arraytostring(int[] a)
+        {
+            string str = "";
+            foreach (int i in a) str += i + " ";
+            return str;
         }
     }
 }

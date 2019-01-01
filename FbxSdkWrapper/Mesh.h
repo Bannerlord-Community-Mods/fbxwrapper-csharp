@@ -23,7 +23,7 @@ namespace FbxWrapper
 		MappingMode GetMappingMode(LayerElementType layer);
 		/// <summary>
 		/// </summary>
-		void SetMappingMode(LayerElementType elementType, MappingMode mode);
+		//void SetMappingMode(LayerElementType elementType, MappingMode mode);
 
 		/// <summary>
 		/// Gets and sets the control points size, if size is different the items are not cleaned !
@@ -32,16 +32,24 @@ namespace FbxWrapper
 		/// <summary>
 		/// sets the vertices, if index is out of limit, the array is resize internaly but function return if success 
 		/// </summary>
-		bool SetControlPointAt(int index, double x, double y, double z, double w);
+		bool SetControlPointAt(int index, double x, double y, double z);
 		/// <summary>
-		/// get the vertices, if index is out of range, zero vector is returned and function return false
-		/// I use this version to allow any custom vertices storage (list, array, etc..) using "ref"
+		/// get the vertices, if index is out of range, zero vector is returned
 		/// </summary>
-		bool GetControlPointAt(int index, float %x, float %y, float %z, float %w);
-		Vector4 Mesh::GetControlPointAt(int index);
+		Vector3 Mesh::GetControlPointAt(int index);
 		
 		property_rw(array<Vector3>^, ControlPoints);
-		property_rw(array<Vector3>^, Normals);
+		
+		/// <summary>
+		/// Set normals in layer 0. A new layer element will be create, the old normals are deleted
+		/// </summary>
+		bool SetNormals(array<Vector3>^ normals, MappingMode mapping, ReferenceMode referencing);
+		/// <summary>
+		/// Gets the normal from layer 0
+		/// </summary>
+		array<Vector3>^ GetNormals();
+
+
 
 
 		void AddPolygon(array<int> ^indices);

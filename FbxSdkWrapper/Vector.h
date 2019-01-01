@@ -131,11 +131,8 @@ namespace FbxWrapper
 			Z = z;
 		}
 
-
-		operator FbxDouble4()
-		{
-			return FbxDouble4(X, Y, Z, W);
-		}
+		inline operator FbxDouble4() { return FbxDouble4(X, Y, Z, W); }
+		
 
 		virtual String ^ToString() override
 		{

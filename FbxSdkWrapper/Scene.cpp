@@ -12,7 +12,7 @@ Scene::Scene(string ^name)
 	//if (System::String::IsNullOrWhiteSpace(name))
 	//	m_scene = FbxScene::Create(Manager::m_manager, nullptr);
 	//else
-		m_scene = FbxScene::Create(Manager::m_manager, StringHelper::ToNative(name));
+	m_scene = FbxScene::Create(Manager::m_manager, StringHelper::ToNative(name));
 
 	m_rootNode = gcnew Node(m_scene->GetRootNode());
 }
@@ -23,8 +23,13 @@ Scene::Scene(string ^name)
 /// </summary>
 void Scene::Export(Scene^ scene, string^ filename, int fileformat)
 {
+	if (!scene->m_scene)
+		throw gcnew FbxException("nullptr");
+	
 	FbxExporter* exporter = Manager::m_exporter;
-	if (!exporter->Initialize(StringHelper::ToNative(filename), fileformat, exporter->GetIOSettings()))
+
+	// NOT USE exporter->GetIOSettings() IT CRASH AFTER SECOND EXPORT ??
+	if (!exporter->Initialize(StringHelper::ToNative(filename), fileformat, Manager::m_manager->GetIOSettings()))
 		throw gcnew FbxException("Failed to initialize the FBX exporter: {0}", gcnew string(exporter->GetStatus().GetErrorString()));
 
 	FbxIOFileHeaderInfo *infoExporter = exporter->GetFileHeaderInfo();
@@ -34,7 +39,6 @@ void Scene::Export(Scene^ scene, string^ filename, int fileformat)
 
 	if (!exporter->Export(scene->m_scene))
 		throw gcnew FbxException("Failed to export the scene: {0}", gcnew string(exporter->GetStatus().GetErrorString()));
-
 }
 
 Scene ^Scene::Import(string ^filename, int fileformat)

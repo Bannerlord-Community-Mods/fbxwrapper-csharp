@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Polygon.h"
-
+#include "LayerElementTool.h"
 
 using namespace System::Collections::Generic;
 
@@ -41,15 +41,21 @@ namespace FbxWrapper
 		property_rw(array<Vector3>^, ControlPoints);
 		
 		/// <summary>
-		/// Set normals in layer 0. A new layer element will be create, the old normals are deleted
-		/// </summary>
-		bool SetNormals(array<Vector3>^ normals, MappingMode mapping, ReferenceMode referencing);
-		/// <summary>
 		/// Gets the normal from layer 0
 		/// </summary>
 		array<Vector3>^ GetNormals();
-
-
+		/// <summary>
+		/// Gets the tangents from layer 0
+		/// </summary>
+		array<Vector3>^ GetTangents();
+		/// <summary>
+		/// Set element in layer 0. A new layer element will be create, the old element are deleted
+		/// </summary>
+		bool SetNormals(array<Vector3>^ normals, MappingMode mapping, ReferenceMode referencing);
+		/// <summary>
+		/// Set element in layer 0. A new layer element will be create, the old element are deleted
+		/// </summary>
+		bool SetTangents(array<Vector3>^ tangents, MappingMode mapping, ReferenceMode referencing);
 
 
 		void AddPolygon(array<int> ^indices);

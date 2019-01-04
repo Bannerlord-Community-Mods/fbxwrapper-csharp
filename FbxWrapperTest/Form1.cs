@@ -149,8 +149,11 @@ namespace FbxWrapperTest
 
             mesh.SetNormals(normals, MappingMode.ByPolygon, ReferenceMode.Direct);
 
+            FbxVector3[] tangents = new FbxVector3[] { Convert(n1), Convert(n2), Convert(n3), Convert(n4) };
 
-    
+            mesh.SetTangents(tangents, MappingMode.ByControlPoint, ReferenceMode.Direct);
+
+
             Manager.SetIOProperty(IOProperty.Exp_FBX_ANIMATION, false);
             Manager.SetIOProperty(IOProperty.Exp_FBX_EMBEDDED, false);
             Manager.SetIOProperty(IOProperty.Exp_FBX_MATERIAL, false);
@@ -192,9 +195,9 @@ namespace FbxWrapperTest
 
         public void UnpackMesh(TreeNode header, Node node)
         {
-            Mesh staticmesh = node.Mesh;
+            Mesh mesh = node.Mesh;
 
-            Debug.WriteLine("triangulated : " + staticmesh.Triangulated);
+            Debug.WriteLine("triangulated : " + mesh.Triangulated);
 
             header.Nodes.Add(string.Format("Pos : {0}", node.Position.ToString()));
             header.Nodes.Add(string.Format("Scale : {0}", node.Scale.ToString()));
@@ -202,27 +205,34 @@ namespace FbxWrapperTest
 
             // Write vertices
             TreeNode vertexnode = new TreeNode("vertices");
-            int vcount = staticmesh.ControlPointsCount;
+            int vcount = mesh.ControlPointsCount;
             for (int i=0;i<vcount;i++)
             {
-                FbxWrapper.Vector3 v = staticmesh.GetControlPointAt(i);
+                FbxWrapper.Vector3 v = mesh.GetControlPointAt(i);
                 vertexnode.Nodes.Add(v.ToString());
             }
             header.Nodes.Add(vertexnode);
 
             // Write normals
-            TreeNode normalnode = new TreeNode("normals " + staticmesh.GetMappingMode(LayerElementType.Normal).ToString());
-            FbxVector3[] normals = staticmesh.GetNormals();
-            foreach (FbxVector3 v in normals) normalnode.Nodes.Add(v.ToString());
+            TreeNode normalnode = new TreeNode("normals " + mesh.GetMappingMode(LayerElementType.Normal).ToString());
+            FbxVector3[] normals = mesh.GetNormals();
+            if (normals!=null)foreach (FbxVector3 v in normals) normalnode.Nodes.Add(v.ToString());
+
+            // Write tangents
+            TreeNode tangentnode = new TreeNode("tangents " + mesh.GetMappingMode(LayerElementType.Tangent).ToString());
+            FbxVector3[] tangents = mesh.GetTangents();
+
+            if (tangents!=null) foreach (FbxVector3 v in tangents) tangentnode.Nodes.Add(v.ToString());
 
             // Write indices
             TreeNode polygonode = new TreeNode("indices");
-            var polygons = staticmesh.Polygons;
+            var polygons = mesh.Polygons;
             foreach (FbxWrapper.Polygon p in polygons) polygonode.Nodes.Add(arraytostring(p.Indices));
 
 
             TreeNode textcoordnode = new TreeNode("textcoord");
             header.Nodes.Add(normalnode);
+            header.Nodes.Add(tangentnode);
             header.Nodes.Add(polygonode);
             header.Nodes.Add(textcoordnode);
         }

@@ -2,6 +2,8 @@
 #include "Mesh.h"
 
 using namespace FbxWrapper;
+using namespace System::Diagnostics;
+
 
 Mesh::Mesh(FbxMesh* pmesh)
 {
@@ -67,92 +69,9 @@ void Mesh::ControlPoints::set(array<Vector3> ^controlpoints)
 		m_mesh->SetControlPointAt((FbxVector4)v, i);
 	}
 }
+
 #pragma endregion
 
-
-array<Vector3> ^Mesh::GetNormals()
-{
-	auto element = m_mesh->GetLayer(0)->GetNormals();
-
-	//Let's get normals of each vertex, since the mapping mode of normal element is by control point
-	if (element->GetMappingMode() == FbxGeometryElement::eByControlPoint)
-	{
-		int count = m_mesh->GetControlPointsCount();
-		auto list = gcnew array<Vector3>(count);
-
-		for (int v = 0, n; v < count; v++)
-		{
-			//reference mode is direct, the normal index is same as vertex index.
-			//get normals by the index of control vertex
-			if (element->GetReferenceMode() == FbxGeometryElement::eDirect) n = v;
-			//reference mode is index-to-direct, get normals by the index-to-direct
-			if (element->GetReferenceMode() == FbxGeometryElement::eIndexToDirect)n = element->GetIndexArray().GetAt(v);
-			list[v] = Vector3(element->GetDirectArray().GetAt(n));
-		}
-		return list;
-	}
-	//mapping mode is by polygon-vertex.we can get normals by retrieving polygon-vertex.
-	else if (element->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
-	{
-		int count = element->mDirectArray->GetCount(); //IS CORRECT ????
-		auto list = gcnew array<Vector3>(count);
-
-		int idxByPolygon = 0;
-
-		//Let's get normals of each polygon, since the mapping mode of normal element is by polygon-vertex.
-		for (int p = 0; p < m_mesh->GetPolygonCount(); p++)
-		{
-			//get polygon size, you know how many vertices in current polygon.
-			int size = m_mesh->GetPolygonSize(p);
-			//retrieve each vertex of current polygon.
-			
-			for (int i = 0, n; i < size; i++)
-			{
-				//reference mode is direct, the normal index is same as lIndexByPolygonVertex.
-				if (element->GetReferenceMode() == FbxGeometryElement::eDirect)
-					n = idxByPolygon;
-
-				//reference mode is index-to-direct, get normals by the index-to-direct
-				if (element->GetReferenceMode() == FbxGeometryElement::eIndexToDirect)
-					n = element->GetIndexArray().GetAt(idxByPolygon);
-
-				if (idxByPolygon >= count)
-					throw gcnew Exception("index of normal is out of range");
-
-				list[idxByPolygon] = Vector3(element->GetDirectArray().GetAt(n));
-
-				idxByPolygon++;
-			}
-		}
-		
-	}
-	//mapping mode is by polygon-vertex.we can get normals by retrieving polygon-vertex.
-	else if (element->GetMappingMode() == FbxGeometryElement::eByPolygon)
-	{
-		int count = m_mesh->GetPolygonCount();
-		auto list = gcnew array<Vector3>(count);
-
-		//Let's get normals of each polygon, since the mapping mode of normal element is by polygon-vertex.
-		for (int i = 0, n; i < count; i++)
-		{
-			//reference mode is direct, the normal index is same as lIndexByPolygonVertex.
-			if (element->GetReferenceMode() == FbxGeometryElement::eDirect)
-				n = i;
-
-			//reference mode is index-to-direct, get normals by the index-to-direct
-			if (element->GetReferenceMode() == FbxGeometryElement::eIndexToDirect)
-				n = element->GetIndexArray().GetAt(i);
-
-			list[i] = Vector3(element->GetDirectArray().GetAt(n));
-		}
-		return list;
-	}
-	else
-	{
-		throw gcnew NotImplementedException("not implemented");
-	}
-	return nullptr;
-}
 
 bool Mesh::SetNormals(array<Vector3>^ normals, MappingMode mapping, ReferenceMode referencing)
 {
@@ -163,63 +82,72 @@ bool Mesh::SetNormals(array<Vector3>^ normals, MappingMode mapping, ReferenceMod
 		m_mesh->CreateLayer();
 		layer0 = m_mesh->GetLayer(0);
 	}
-
-	FbxLayerElementNormal* normalLayer = FbxLayerElementNormal::Create(m_mesh, "normals");
-	normalLayer->SetMappingMode((FbxLayerElement::EMappingMode)mapping);
-	normalLayer->SetReferenceMode((FbxLayerElement::EReferenceMode)referencing);
-
-	if (mapping == MappingMode::ByControlPoint)
+	FbxLayerElementTemplate<FbxVector4> *normalLayer = FbxLayerElementNormal::Create(m_mesh, "normals");
+	int size = normals->Length;
+	FbxVector4 *list = new FbxVector4[size];
+	for (int i = 0; i < size; i++)
 	{
-		int count = m_mesh->GetControlPointsCount();
-		if (normals->Length >count)
-			throw gcnew Exception("In ByControlPoint mapping mode, normals elements must be equal to (or less than) control points");
-		
-		if (referencing == ReferenceMode::Direct)
-		{
-			normalLayer->GetDirectArray().AddMultiple(count);
-			for (int i = 0; i < count; i++)
-			{
-				Vector3 vector = normals[i];
-				normalLayer->GetDirectArray().SetAt(i, (FbxVector4)vector);
-			}
-		}
-		else
-		{
-			throw gcnew NotImplementedException("not implemented");
-		}
-
+		Vector3 n = normals[i];
+		list[i] = (FbxVector4)n;
 	}
-	else if (mapping == MappingMode::ByPolygon)
-	{
-		int count = m_mesh->GetPolygonCount();
-		if (normals->Length > count)
-			throw gcnew Exception("In ByPolygon mapping mode, normals elements must be equal to (or less than) polygons");
-
-		if (referencing == ReferenceMode::Direct)
-		{
-			normalLayer->GetDirectArray().AddMultiple(count);
-			for (int i = 0; i < count; i++)
-			{
-				Vector3 vector = normals[i];
-				normalLayer->GetDirectArray().SetAt(i, (FbxVector4)vector);
-			}
-		}
-		else
-		{
-			throw gcnew NotImplementedException("not implemented");
-		}
-	}
-	else
-	{
-		throw gcnew NotImplementedException("not implemented");
-	}
-
-	layer0->SetNormals(normalLayer);
-
+	SetLayerElementTemplate<FbxVector4>(m_mesh, normalLayer, list, size, mapping, referencing);
+	layer0->SetLayerElementOfType(normalLayer, FbxLayerElement::EType::eNormal);
 	return true;
 }
 
+bool Mesh::SetTangents(array<Vector3>^ tangents, MappingMode mapping, ReferenceMode referencing)
+{
+	// Set the normals on Layer 0.
+	auto layer0 = m_mesh->GetLayer(0);
+	if (layer0 == NULL)
+	{
+		m_mesh->CreateLayer();
+		layer0 = m_mesh->GetLayer(0);
+	}
+	FbxLayerElementTemplate<FbxVector4> *tangentLayer = FbxLayerElementTangent::Create(m_mesh, "tangents");
+	int size = tangents->Length;
+	FbxVector4 *list = new FbxVector4[size];
+	for (int i = 0; i < size; i++)
+	{
+		Vector3 n = tangents[i];
+		list[i] = (FbxVector4)n;
+	}
+	SetLayerElementTemplate<FbxVector4>(m_mesh, tangentLayer, list, size, mapping, referencing);
+	layer0->SetLayerElementOfType(tangentLayer, FbxLayerElement::EType::eTangent);
+	return true;
+}
 
+array<Vector3> ^Mesh::GetNormals()
+{
+	auto layer0 = m_mesh->GetLayer(0);
+	if (layer0 == NULL) return nullptr;
+
+	array<Vector3> ^vectors = nullptr;
+	int size;
+	FbxVector4* plist = GetLayerElementTemplate<FbxVector4>(m_mesh, layer0->GetNormals(), size);
+	if (plist)
+	{
+	    vectors = gcnew array<Vector3>(size);
+		for (int i = 0; i < size; i++) vectors[i] = Vector3(plist[i]);
+	}
+	return vectors;
+}
+
+array<Vector3> ^Mesh::GetTangents()
+{
+	auto layer0 = m_mesh->GetLayer(0);
+	if (layer0 == NULL) return nullptr;
+
+	array<Vector3> ^vectors = nullptr;
+	int size;
+	FbxVector4* plist = GetLayerElementTemplate<FbxVector4>(m_mesh, layer0->GetTangents(), size);
+	if (plist)
+	{
+		vectors = gcnew array<Vector3>(size);
+		for (int i = 0; i < size; i++) vectors[i] = Vector3(plist[i]);
+	}
+	return vectors;
+}
 
 void Mesh::AddPolygon(array<int>^ indices)
 {
@@ -266,17 +194,6 @@ array<Vector2> ^Mesh::TextureCoords::get()
 	for (int i = 0; i < count; i++)
 		list[i] = Vector2(coords->GetDirectArray().GetAt(i));
 
-	return list;
-}
-
-array<Vector3> ^Mesh::Tangents::get()
-{
-	auto tangents = m_mesh->GetLayer(0)->GetTangents();
-	int count = tangents->GetDirectArray().GetCount();
-	auto list = gcnew array<Vector3>(count);
-
-	for (int i = 0; i < count; i++)
-		list[i] = Vector3(tangents->GetDirectArray().GetAt(i));
 	return list;
 }
 

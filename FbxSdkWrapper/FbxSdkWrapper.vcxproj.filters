@@ -40,6 +40,9 @@
     <ClInclude Include="resource.h">
       <Filter>Helper</Filter>
     </ClInclude>
+    <ClInclude Include="LayerElementTool.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Helper">

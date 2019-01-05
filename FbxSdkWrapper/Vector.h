@@ -22,10 +22,9 @@ namespace FbxWrapper
 		property double B;
 		property double A;
 
-		operator FbxColor()
-		{
-			return FbxColor(R, G, B, A);
-		}
+		inline operator FbxVector4() { return FbxVector4(R, G, B, A); }
+		inline operator FbxDouble4() { return FbxDouble4(R, G, B, A); }
+		inline operator FbxColor() { return FbxColor(R, G, B, A); }
 
 		virtual String ^ToString() override
 		{
@@ -40,6 +39,8 @@ namespace FbxWrapper
 			B = fbxColour.mBlue;
 			A = fbxColour.mAlpha;
 		}
+
+
 	};
 
 	public value struct Vector3
@@ -57,7 +58,6 @@ namespace FbxWrapper
 		property double Z;
 
 		inline operator FbxDouble3() { return FbxDouble3(X, Y, Z); }
-
 		inline operator FbxVector4() { return FbxVector4(X, Y, Z, 0); }
 
 
@@ -90,11 +90,8 @@ namespace FbxWrapper
 			X = x;
 			Y = y;
 		}
-
-		operator FbxDouble2()
-		{
-			return FbxDouble2(X, Y);
-		}
+		inline operator FbxVector2() { return FbxVector2(X, Y); }
+		inline operator FbxDouble2() { return FbxDouble2(X, Y); }
 
 		virtual String ^ToString() override
 		{
@@ -123,7 +120,7 @@ namespace FbxWrapper
 			W = vector.mData[3];
 		}
 	public:
-		Vector4(double w, double x, double y, double z)
+		Vector4(double x, double y, double z, double w)
 		{
 			W = w;
 			X = x;
@@ -131,17 +128,17 @@ namespace FbxWrapper
 			Z = z;
 		}
 
+		inline operator FbxVector4() { return FbxVector4(X, Y, Z, W); }
 		inline operator FbxDouble4() { return FbxDouble4(X, Y, Z, W); }
 		
 
 		virtual String ^ToString() override
 		{
-			return String::Format("{0}, {1}, {2}, {3}", Math::Round(W, 3), Math::Round(X, 3), Math::Round(Y, 3), Math::Round(Z, 3));
+			return String::Format("{0}, {1}, {2}, {3}", Math::Round(X, 3), Math::Round(Y, 3), Math::Round(Z, 3), Math::Round(W, 3));
 		}
-
-		property double W;
 		property double X;
 		property double Y;
 		property double Z;
+		property double W;
 	};
 }

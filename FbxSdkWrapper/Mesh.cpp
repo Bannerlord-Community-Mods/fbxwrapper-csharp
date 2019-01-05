@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Mesh.h"
+#include "fbxsdk\scene\geometry\fbxlayer.h"
 
 using namespace FbxWrapper;
 using namespace System::Diagnostics;
@@ -95,7 +96,7 @@ bool Mesh::SetNormals(array<Vector3>^ normals, MappingMode mapping, ReferenceMod
 	return true;
 }
 
-bool Mesh::SetTangents(array<Vector3>^ tangents, MappingMode mapping, ReferenceMode referencing)
+bool Mesh::SetTangents(array<Vector4>^ tangents, MappingMode mapping, ReferenceMode referencing)
 {
 	// Set the normals on Layer 0.
 	auto layer0 = m_mesh->GetLayer(0);
@@ -109,13 +110,63 @@ bool Mesh::SetTangents(array<Vector3>^ tangents, MappingMode mapping, ReferenceM
 	FbxVector4 *list = new FbxVector4[size];
 	for (int i = 0; i < size; i++)
 	{
-		Vector3 n = tangents[i];
+		Vector4 n = tangents[i];
 		list[i] = (FbxVector4)n;
 	}
 	SetLayerElementTemplate<FbxVector4>(m_mesh, tangentLayer, list, size, mapping, referencing);
 	layer0->SetLayerElementOfType(tangentLayer, FbxLayerElement::EType::eTangent);
 	return true;
 }
+
+bool Mesh::SetTextCoords(array<Vector2>^ textcoords, MappingMode mapping, ReferenceMode referencing)
+{
+	// Set the normals on Layer 0.
+	auto layerN = m_mesh->GetLayer(UVLayer);
+	if (layerN == NULL)
+	{
+		m_mesh->CreateLayer();
+		layerN = m_mesh->GetLayer(UVLayer);
+	}
+	FbxLayerElementTemplate<FbxVector2> *textcoordLayer = FbxLayerElementUV::Create(m_mesh, "textcoord");
+	int size = textcoords->Length;
+	FbxVector2 *list = new FbxVector2[size];
+	for (int i = 0; i < size; i++)
+	{
+		Vector2 n = textcoords[i];
+		list[i] = (FbxVector2)n;
+	}
+	SetLayerElementTemplate<FbxVector2>(m_mesh, textcoordLayer, list, size, mapping, referencing);
+	
+	layerN->SetLayerElementOfType(textcoordLayer, FbxLayerElement::EType::eUV);
+	
+	return true;
+}
+
+bool Mesh::SetVertexColours(array<Colour>^ colours, MappingMode mapping, ReferenceMode referencing)
+{
+	// Set the normals on Layer 0.
+	auto layer0 = m_mesh->GetLayer(0);
+	if (layer0 == NULL)
+	{
+		m_mesh->CreateLayer();
+		layer0 = m_mesh->GetLayer(0);
+	}
+	FbxLayerElementTemplate<FbxColor> *coloursLayer = FbxLayerElementVertexColor::Create(m_mesh, "VertexColours");
+	int size = colours->Length;
+	FbxColor *list = new FbxColor[size];
+	for (int i = 0; i < size; i++)
+	{
+		Colour n = colours[i];
+		list[i] = (FbxColor)n;
+	}
+	SetLayerElementTemplate<FbxColor>(m_mesh, coloursLayer, list, size, mapping, referencing);
+
+	layer0->SetLayerElementOfType(coloursLayer, FbxLayerElement::EType::eVertexColor);
+
+	return true;
+}
+
+
 
 array<Vector3> ^Mesh::GetNormals()
 {
@@ -133,21 +184,55 @@ array<Vector3> ^Mesh::GetNormals()
 	return vectors;
 }
 
-array<Vector3> ^Mesh::GetTangents()
+array<Vector4> ^Mesh::GetTangents()
 {
 	auto layer0 = m_mesh->GetLayer(0);
 	if (layer0 == NULL) return nullptr;
 
-	array<Vector3> ^vectors = nullptr;
+	array<Vector4> ^vectors = nullptr;
 	int size;
 	FbxVector4* plist = GetLayerElementTemplate<FbxVector4>(m_mesh, layer0->GetTangents(), size);
 	if (plist)
 	{
-		vectors = gcnew array<Vector3>(size);
-		for (int i = 0; i < size; i++) vectors[i] = Vector3(plist[i]);
+		vectors = gcnew array<Vector4>(size);
+		for (int i = 0; i < size; i++) vectors[i] = Vector4(plist[i]);
 	}
 	return vectors;
 }
+
+array<Vector2> ^Mesh::GetTextCoords()
+{
+	auto layerN = m_mesh->GetLayer(UVLayer);
+	if (layerN == NULL) return nullptr;
+
+	array<Vector2> ^vectors = nullptr;
+	int size;
+	FbxVector2* plist = GetLayerElementTemplate<FbxVector2>(m_mesh, layerN->GetUVs(), size);
+	if (plist)
+	{
+		vectors = gcnew array<Vector2>(size);
+		for (int i = 0; i < size; i++) vectors[i] = Vector2(plist[i]);
+	}
+	return vectors;
+}
+
+array<Colour> ^Mesh::GetVertexColours()
+{
+	auto layer0 = m_mesh->GetLayer(0);
+	if (layer0 == NULL) return nullptr;
+
+	array<Colour> ^vectors = nullptr;
+	int size;
+	FbxColor* plist = GetLayerElementTemplate<FbxColor>(m_mesh, layer0->GetVertexColors(), size);
+	if (plist)
+	{
+		vectors = gcnew array<Colour>(size);
+		for (int i = 0; i < size; i++) vectors[i] = Colour(plist[i]);
+	}
+	return vectors;
+}
+
+
 
 void Mesh::AddPolygon(array<int>^ indices)
 {
@@ -157,7 +242,7 @@ void Mesh::AddPolygon(array<int>^ indices)
 	m_mesh->EndPolygon();
 }
 
-array<FbxWrapper::Polygon> ^Mesh::Polygons::get()
+array<FbxWrapper::Polygon> ^Mesh::GetPolygons()
 {
 	int count = m_mesh->GetPolygonCount();
 	auto list = gcnew array<Polygon>(count);
@@ -180,22 +265,6 @@ array<FbxWrapper::Polygon> ^Mesh::Polygons::get()
 
 /*
 
-array<Vector2> ^Mesh::TextureCoords::get()
-{
-	FbxLayer* layer = m_mesh->GetLayer(UVLayer);
-
-	if (!layer)
-		return gcnew array<Vector2>(0);
-
-	auto coords = layer->GetUVs();
-	int count = coords == nullptr ? 0 : coords->GetDirectArray().GetCount();
-	auto list = gcnew array<Vector2>(count);
-
-	for (int i = 0; i < count; i++)
-		list[i] = Vector2(coords->GetDirectArray().GetAt(i));
-
-	return list;
-}
 
 array<Colour> ^Mesh::VertexColours::get()
 {

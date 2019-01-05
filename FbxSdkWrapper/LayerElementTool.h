@@ -17,6 +17,7 @@ namespace FbxWrapper
 		if (element->GetMappingMode() == FbxGeometryElement::eByControlPoint)
 		{
 			size = mesh->GetControlPointsCount();
+			if (!size) return nullptr;
 			T *list = new T[size];
 
 			for (int v = 0, n; v < size; v++)
@@ -34,6 +35,7 @@ namespace FbxWrapper
 		else if (element->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
 		{
 			size = element->mDirectArray->GetCount(); //IS CORRECT ????
+			if (!size) return nullptr;
 			T *list = new T[size];
 
 			int idxByPolygon = 0;

@@ -6,7 +6,11 @@ using System.Collections.Generic;
 using FbxWrapper;
 using Polygon = CommonLib.Wavefront.Polygon;
 using Vector3 = CommonLib.Maths.Vector3;
+using Vector4 = CommonLib.Maths.Vector4;
+using Color = CommonLib.Maths.Color32;
+
 using FbxVector3 = FbxWrapper.Vector3;
+using FbxVector4 = FbxWrapper.Vector4;
 
 namespace FbxWrapperTest
 {
@@ -141,6 +145,8 @@ namespace FbxWrapperTest
             n3.Normalize();
             n4.Normalize();
 
+            Vector4 t1 = new Vector4(1, 0, 0, 1);
+
             // byControlPoint
             //FbxVector3[] normals = new FbxVector3[] { Convert(n1), Convert(n2), Convert(n3), Convert(n4) };
             
@@ -149,7 +155,7 @@ namespace FbxWrapperTest
 
             mesh.SetNormals(normals, MappingMode.ByPolygon, ReferenceMode.Direct);
 
-            FbxVector3[] tangents = new FbxVector3[] { Convert(n1), Convert(n2), Convert(n3), Convert(n4) };
+            FbxVector4[] tangents = new FbxVector4[] { Convert(t1), Convert(t1), Convert(t1), Convert(t1) };
 
             mesh.SetTangents(tangents, MappingMode.ByControlPoint, ReferenceMode.Direct);
 
@@ -220,13 +226,13 @@ namespace FbxWrapperTest
 
             // Write tangents
             TreeNode tangentnode = new TreeNode("tangents " + mesh.GetMappingMode(LayerElementType.Tangent).ToString());
-            FbxVector3[] tangents = mesh.GetTangents();
+            FbxVector4[] tangents = mesh.GetTangents();
 
-            if (tangents!=null) foreach (FbxVector3 v in tangents) tangentnode.Nodes.Add(v.ToString());
+            if (tangents!=null) foreach (FbxVector4 v in tangents) tangentnode.Nodes.Add(v.ToString());
 
             // Write indices
             TreeNode polygonode = new TreeNode("indices");
-            var polygons = mesh.Polygons;
+            var polygons = mesh.GetPolygons();
             foreach (FbxWrapper.Polygon p in polygons) polygonode.Nodes.Add(arraytostring(p.Indices));
 
 
@@ -254,6 +260,7 @@ namespace FbxWrapperTest
         }
 
         FbxVector3 Convert(Vector3 v) { return new FbxVector3(v.x, v.y, v.z); }
+        FbxVector4 Convert(Vector4 v) { return new FbxVector4(v.x, v.y, v.z, v.w); }
 
         string arraytostring(int[] a)
         {

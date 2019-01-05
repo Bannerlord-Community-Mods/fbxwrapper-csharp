@@ -47,7 +47,15 @@ namespace FbxWrapper
 		/// <summary>
 		/// Gets the tangents from layer 0
 		/// </summary>
-		array<Vector3>^ GetTangents();
+		array<Vector4>^ GetTangents();
+		/// <summary>
+		/// Gets the uv from layer 0
+		/// </summary>
+		array<Vector2>^ GetTextCoords();
+		/// <summary>
+		/// Gets the colors from layer 0
+		/// </summary>
+		array<Colour>^ GetVertexColours();
 		/// <summary>
 		/// Set element in layer 0. A new layer element will be create, the old element are deleted
 		/// </summary>
@@ -55,16 +63,26 @@ namespace FbxWrapper
 		/// <summary>
 		/// Set element in layer 0. A new layer element will be create, the old element are deleted
 		/// </summary>
-		bool SetTangents(array<Vector3>^ tangents, MappingMode mapping, ReferenceMode referencing);
+		bool SetTangents(array<Vector4>^ tangents, MappingMode mapping, ReferenceMode referencing);
+		/// <summary>
+		/// Set element in layer 0. A new layer element will be create, the old element are deleted
+		/// </summary>
+		bool SetTextCoords(array<Vector2>^ textcoords, MappingMode mapping, ReferenceMode referencing);
+		/// <summary>
+		/// Set element in layer 0. A new layer element will be create, the old element are deleted
+		/// </summary>
+		bool SetVertexColours(array<Colour>^ colours, MappingMode mapping, ReferenceMode referencing);
 
-
+		/// <summary>
+		/// Get all polygons
+		/// </summary>
+		array<Polygon>^ GetPolygons();
+		/// <summary>
+		/// Add a new polygon
+		/// </summary>
 		void AddPolygon(array<int> ^indices);
-		property_r(array<Polygon>^, Polygons);
+		
 
-		//property_r(array<Vector2>^, TextureCoords);
-		//property_r(array<Colour>^, VertexColours);
-		//property_r(array<Vector3>^, Tangents);
-		//property_r(array<int>^, MaterialIDs);
 		property_r(bool, Triangulated);
 		
 		property int UVLayer;

@@ -113,11 +113,13 @@
       <AdditionalIncludeDirectories>$(SolutionDir)\FBXSDK.2019.2\include</AdditionalIncludeDirectories>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)\libfbxsdk.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <FullProgramDatabaseFile>
       </FullProgramDatabaseFile>
     </Link>
@@ -158,6 +160,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(SolutionDir)\FBXSDK.2019.2\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)\libfbxsdk.lib</AdditionalDependencies>
@@ -176,6 +180,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(SolutionDir)\FBXSDK.2019.2\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)\libfbxsdk.lib</AdditionalDependencies>

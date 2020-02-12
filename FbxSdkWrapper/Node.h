@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "NodeAttribute.h"
 #include "Mesh.h"
+#include "Material.h"
 #include "Manager.h"
 
 //using namespace System::Collections::Generic;
@@ -51,6 +52,7 @@ namespace FbxWrapper
 		int GetChildCount();
 		Node ^GetChild(int index);
 
+		array<Material^>^ GetMaterials();
 		void AddChild(Node ^node);
 
 	internal:

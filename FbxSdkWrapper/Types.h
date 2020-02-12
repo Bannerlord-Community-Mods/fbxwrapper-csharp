@@ -130,4 +130,5 @@ namespace FbxWrapper
 
 		TypeCount
 	};
+	
 }

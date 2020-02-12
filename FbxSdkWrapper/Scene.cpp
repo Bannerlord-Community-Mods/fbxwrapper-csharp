@@ -43,7 +43,7 @@ void Scene::Export(Scene^ scene, string^ filename, int fileformat)
 
 Scene ^Scene::Import(string ^filename, int fileformat)
 {
-	FbxImporter* importer = Manager::m_importer;
+	FbxImporter* importer = FbxImporter::Create(Manager::m_manager, "Importer");
 
 	if (!importer->Initialize(StringHelper::ToNative(filename), fileformat, importer->GetIOSettings()))
 		throw gcnew FbxException("Failed to initialise the FBX importer: {0}", gcnew string(importer->GetStatus().GetErrorString()));
@@ -60,7 +60,7 @@ Scene ^Scene::Import(string ^filename, int fileformat)
 
 	// Needs refreshing
 	scene->m_rootNode = gcnew Node(scene->m_scene->GetRootNode());
-
+	importer->Destroy();
 	return scene;
 }
 

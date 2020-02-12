@@ -56,6 +56,19 @@ Node ^Node::GetChild(int index)
 	return gcnew Node(m_node->GetChild(index));
 }
 
+array<Material^>^ FbxWrapper::Node::GetMaterials()
+{
+    
+	array<Material^> ^materials = gcnew array<Material^>(this->m_node->GetMaterialCount());
+	for (int i = 0; i < this->m_node->GetMaterialCount(); i++) {
+		if (this->m_node->GetMaterial(i) != nullptr) {
+			materials[i] = gcnew Material(this->m_node->GetMaterial(i));
+		}
+	}
+	return materials;
+	// TODO: insert return statement here
+}
+
 void Node::AddChild(Node ^node)
 {
 	m_node->AddChild(node->m_node);

@@ -24,7 +24,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <Keyword>ManagedCProj</Keyword>
     <RootNamespace>Wrapper</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
     <ProjectName>FbxSdkWrapper</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -110,7 +110,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;FBXSDK_SHARED;_DEBUG;DEBUG</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)\FBXSDK.2019.2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\FBXSDK.2019.2\include</AdditionalIncludeDirectories>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <DisableSpecificWarnings>
@@ -118,13 +118,13 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)\libfbxsdk.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)\..\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <FullProgramDatabaseFile>
       </FullProgramDatabaseFile>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /d /f "$(SolutionDir)FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(ConfigurationName)\libfbxsdk.dll" "$(OutDir)"</Command>
+      <Command>xcopy /d /f "$(ProjectDir)\..\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(ConfigurationName)\libfbxsdk.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Require the libfbxsdk.dll file in the same folder of executable project, not necessary overwrite, just copy if not exist</Message>
@@ -136,17 +136,17 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;FBXSDK_SHARED</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)\FBXSDK.2019.2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\FBXSDK.2019.2\include</AdditionalIncludeDirectories>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)\libfbxsdk.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)\..\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /d /f "$(SolutionDir)FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(ConfigurationName)\libfbxsdk.dll" "$(OutDir)"</Command>
+      <Command>xcopy /d /f "$(ProjectDir)\..\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(ConfigurationName)\libfbxsdk.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Require the libfbxsdk.dll file in the same folder of executable project, not necessary overwrite, just copy if not exist</Message>
@@ -158,17 +158,17 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;FBXSDK_SHARED</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)\FBXSDK.2019.2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\FBXSDK.2019.2\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)\libfbxsdk.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(ProjectDir)\..\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)\libfbxsdk.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)\..\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /d /f "$(SolutionDir)FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(ConfigurationName)\libfbxsdk.dll" "$(OutDir)"</Command>
+      <Command>xcopy /d /f "$(ProjectDir)\..\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(ConfigurationName)\libfbxsdk.dll" "$(OutDir)"</Command>
       <Message>Require the libfbxsdk.dll file in the same folder of executable project, not necessary overwrite, just copy if not exist</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -178,22 +178,23 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>FBXSDK_SHARED</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)\FBXSDK.2019.2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\FBXSDK.2019.2\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)\libfbxsdk.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(ProjectDir)\..\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)\libfbxsdk.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)\..\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /d /f "$(SolutionDir)FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(ConfigurationName)\libfbxsdk.dll" "$(OutDir)"</Command>
+      <Command>xcopy /d /f "$(ProjectDir)\..\FBXSDK.2019.2\lib\vs2017\$(PlatformTarget)\$(ConfigurationName)\libfbxsdk.dll" "$(OutDir)"</Command>
       <Message>Require the libfbxsdk.dll file in the same folder of executable project, not necessary overwrite, just copy if not exist</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Texture.cpp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -202,6 +203,7 @@
     <ClInclude Include="IOSetting.h" />
     <ClInclude Include="LayerElementTool.h" />
     <ClInclude Include="Manager.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="NodeAttribute.h" />
@@ -211,12 +213,14 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="Stdafx.h" />
     <ClInclude Include="StringHelper.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="Vector.h" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="FileFormat.cpp" />
     <ClCompile Include="IOSetting.cpp" />
     <ClCompile Include="Manager.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="NodeAttribute.cpp" />
     <ClCompile Include="Polygon.cpp" />

@@ -174,7 +174,7 @@ array<Vector3> ^Mesh::GetNormals()
 	if (layer0 == NULL) return nullptr;
 
 	array<Vector3> ^vectors = nullptr;
-	int size;
+		int size;
 	FbxVector4* plist = GetLayerElementTemplate<FbxVector4>(m_mesh, layer0->GetNormals(), size);
 	if (plist)
 	{

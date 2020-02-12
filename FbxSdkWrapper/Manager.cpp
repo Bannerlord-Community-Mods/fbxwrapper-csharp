@@ -18,13 +18,11 @@ static Manager::Manager()
 	FbxIOSettings* m_iosetting = FbxIOSettings::Create(m_manager, IOSROOT);
 	m_manager->SetIOSettings(m_iosetting);
 
-	m_importer = FbxImporter::Create(m_manager, "Importer");
 	m_exporter = FbxExporter::Create(m_manager, "Exporter");
 }
 
 Manager::~Manager()
 {
-	m_importer->Destroy();
 	m_exporter->Destroy();
 	m_manager->Destroy();
 }

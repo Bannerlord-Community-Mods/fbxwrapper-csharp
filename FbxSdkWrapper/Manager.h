@@ -28,7 +28,6 @@ namespace FbxWrapper
 
 	internal:
 		static FbxManager *m_manager;
-		static FbxImporter *m_importer;
 		static FbxExporter *m_exporter;
 	};
 }

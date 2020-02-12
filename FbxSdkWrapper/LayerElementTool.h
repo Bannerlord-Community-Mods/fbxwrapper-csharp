@@ -33,15 +33,17 @@ namespace FbxWrapper
 		}
 		//mapping mode is by polygon-vertex.we can get normals by retrieving polygon-vertex.
 		else if (element->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
-		{
-			size = element->mDirectArray->GetCount(); //IS CORRECT ????
-			if (!size) return nullptr;
-			T *list = new T[size];
+		{ 
+			int directArraySize = element->GetDirectArray().GetCount(); //IS CORRECT ????
+			if (!directArraySize) return nullptr;
 
 			int idxByPolygon = 0;
 
 			//Let's get normals of each polygon, since the mapping mode of normal element is by polygon-vertex.
-			for (int p = 0; p < mesh->GetPolygonCount(); p++)
+			int polygonCount = mesh->GetPolygonCount();
+			T *list = new T[polygonCount*mesh->GetPolygonSize(0)];
+			size = polygonCount * mesh->GetPolygonSize(0);
+			for (int p = 0; p < polygonCount; p++)
 			{
 				//get polygon size, you know how many vertices in current polygon.
 				int polycount = mesh->GetPolygonSize(p);
@@ -57,7 +59,7 @@ namespace FbxWrapper
 					if (element->GetReferenceMode() == FbxGeometryElement::eIndexToDirect)
 						n = element->GetIndexArray().GetAt(idxByPolygon);
 
-					if (idxByPolygon >= size)
+					if (n >= size)
 						throw gcnew Exception("index of normal is out of range");
 
 					list[idxByPolygon] = element->GetDirectArray().GetAt(n);
@@ -65,6 +67,7 @@ namespace FbxWrapper
 					idxByPolygon++;
 				}
 			}
+			return list;
 
 		}
 		//mapping mode is by polygon-vertex.we can get normals by retrieving polygon-vertex.

@@ -262,3 +262,4 @@ typedef FbxVectorTemplate4<FbxDouble4> FbxDouble4x4;
 #include <fbxsdk/fbxsdk_nsend.h>
 
 #endif /* _FBXSDK_CORE_ARCH_TYPES_H_ */
+	

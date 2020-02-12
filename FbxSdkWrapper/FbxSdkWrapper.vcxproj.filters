@@ -13,6 +13,8 @@
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="FileFormat.cpp" />
     <ClCompile Include="IOSetting.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Properties.h">
@@ -43,6 +45,8 @@
     <ClInclude Include="LayerElementTool.h">
       <Filter>Helper</Filter>
     </ClInclude>
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Helper">
